@@ -25,6 +25,15 @@ class Language(Base):
     )
 
 
+# Association table for cards <-> decks
+card_deck_assoc = sa.Table(
+    "card_deck_mapping",
+    Base.metadata,
+    sa.Column("card_id", sa.ForeignKey("flash_cards.id")),
+    sa.Column("deck_id", sa.ForeignKey("card_decks.id"))
+)
+
+
 class FlashCard(Base):
     """
     A flash card containing a word in the target language, its definition in
@@ -55,3 +64,29 @@ class FlashCard(Base):
     deleted_at: Mapped[Optional[datetime]]
 
     target_language: Mapped["Language"] = relationship()
+
+
+class CardDeck(Base):
+    """
+    A deck of a couple dozen flash cards for study.
+    """
+    __tablename__ = "card_decks"
+
+    id: Mapped[int] = mapped_column(
+        sa.BigInteger(),
+        autoincrement=True,
+        primary_key=True
+    )
+    name: Mapped[str] = mapped_column(sa.String(256))
+    context: Mapped[str] = mapped_column(sa.String(256))
+    language_id: Mapped[int] = mapped_column(sa.ForeignKey("languages.id"))
+
+    # Dates
+    created_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
+    updated_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
+
+    # Relationships
+    language: Mapped["Language"] = relationship()
+    cards: Mapped[List[FlashCard]] = relationship(
+        secondary=card_deck_assoc
+    )
