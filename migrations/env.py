@@ -1,4 +1,5 @@
 import os
+import dotenv
 from pathlib import Path
 from logging.config import fileConfig
 
@@ -21,17 +22,20 @@ if config.config_file_name is not None:
 target_metadata = app_models.Base.metadata
 
 # Load DB credentials from env - use the example file for local development
-if os.getenv("DEPLOYMENT_ENV", "local") == "local":
+deploy_env = os.getenv("DEPLOYMENT_ENV", "local")
+if deploy_env == "local":
     env_file = Path("app") / ".env.example"
 else:
     env_file = Path(".env")
 
 assert env_file.is_file(), "Found no credentials file!"
+dotenv.load_dotenv(env_file)
+
 sa_url = "postgresql+psycopg2://%s:%s@%s/%s" \
     % (
         os.getenv("POSTGRES_USER"),
         os.getenv("POSTGRES_PASSWORD"),
-        os.getenv("DB_HOST"),
+        os.getenv("DB_HOST") if deploy_env != "local" else "localhost",
         os.getenv("POSTGRES_DB")
     )
 
