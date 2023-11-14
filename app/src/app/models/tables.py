@@ -37,7 +37,7 @@ class FlashCard(Base):
         primary_key=True
     )
     target_word: Mapped[str] = mapped_column(sa.String(64))
-    source_word: Mapped[str] = mapped_column(sa.String(64))
+    translation: Mapped[str] = mapped_column(sa.String(256))
     sentence: Mapped[Optional[str]] = mapped_column(
         sa.String(256),
         nullable=True
