@@ -4,6 +4,7 @@ from typing import Optional, List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+from ..enums import PartOfSpeech
 
 
 class Language(Base):
@@ -44,6 +45,9 @@ class FlashCard(Base):
     )
     target_language_id: Mapped[int] = mapped_column(
         sa.ForeignKey("languages.id")
+    )
+    part_of_speech: Mapped[PartOfSpeech] = mapped_column(
+        sa.types.Enum(PartOfSpeech)
     )
 
     created_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
