@@ -1,0 +1,23 @@
+version: "3"
+services:
+  database:
+    container_name: database
+    image: "postgres:16"
+    env_file:
+      - app/.env.example
+    ports:
+      - "5432:5432"
+    volumes:
+      - "flashy-card-db:/var/lib/postgresql/data"
+
+  app:
+    container_name: "app"
+    build:
+      context: ./app
+    env_file:
+      - app/.env.example
+    ports:
+      - "3000:3000"
+
+volumes:
+  flashy-card-db:
