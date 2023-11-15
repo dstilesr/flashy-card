@@ -19,9 +19,14 @@ class Language(Base):
         primary_key=True
     )
     name: Mapped[str] = mapped_column(sa.String(128), nullable=False)
+    slug: Mapped[str] = mapped_column(sa.String(64), unique=True)
     notes: Mapped[Optional[str]] = mapped_column(
         sa.Text(),
         nullable=True
+    )
+
+    __table_args__ = (
+        sa.Index("language_slug_idx", "slug", unique=True),
     )
 
 

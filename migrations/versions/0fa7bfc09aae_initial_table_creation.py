@@ -1,8 +1,8 @@
 """Initial table creation
 
-Revision ID: 9c04f3b98d2a
+Revision ID: 0fa7bfc09aae
 Revises: 
-Create Date: 2023-11-14 18:40:11.892113
+Create Date: 2023-11-15 09:18:28.552632
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9c04f3b98d2a'
+revision: str = '0fa7bfc09aae'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,9 +24,12 @@ def upgrade() -> None:
         'languages',
         sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column('name', sa.String(length=128), nullable=False),
+        sa.Column('slug', sa.String(length=64), nullable=False),
         sa.Column('notes', sa.Text(), nullable=True),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('slug')
     )
+    op.create_index('language_slug_idx', 'languages', ['slug'], unique=True)
     op.create_table(
         'card_decks',
         sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
@@ -71,5 +74,6 @@ def downgrade() -> None:
     op.drop_table('card_deck_mapping')
     op.drop_table('flash_cards')
     op.drop_table('card_decks')
+    op.drop_index('language_slug_idx', table_name='languages')
     op.drop_table('languages')
     # ### end Alembic commands ###
