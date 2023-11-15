@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from ..template_util import TEMPLATE_ENV
 
@@ -20,5 +20,12 @@ async def main_page() -> HTMLResponse:
 
 
 @base_router.get("/health")
-async def health():
-    return {"status": "ok"}
+async def health() -> JSONResponse:
+    """
+    Simple health-check endpoint.
+    :return:
+    """
+    return JSONResponse(
+        {"status": "ok"},
+        status_code=200
+    )
