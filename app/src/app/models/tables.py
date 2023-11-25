@@ -25,6 +25,8 @@ class Language(Base):
         nullable=True
     )
 
+    decks: Mapped[List["CardDeck"]] = relationship(back_populates="language")
+
     __table_args__ = (
         sa.Index("language_slug_idx", "slug", unique=True),
     )
@@ -91,7 +93,7 @@ class CardDeck(Base):
     updated_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
 
     # Relationships
-    language: Mapped["Language"] = relationship()
+    language: Mapped["Language"] = relationship(back_populates="decks")
     cards: Mapped[List[FlashCard]] = relationship(
         secondary=card_deck_assoc
     )

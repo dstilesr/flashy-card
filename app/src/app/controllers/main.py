@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, JSONResponse
 
+from .languages import lang_router
 from ..template_util import TEMPLATE_ENV
 
 base_router = APIRouter()
@@ -29,3 +30,7 @@ async def health() -> JSONResponse:
         {"status": "ok"},
         status_code=200
     )
+
+
+# Includes
+base_router.include_router(lang_router, prefix="/languages")
