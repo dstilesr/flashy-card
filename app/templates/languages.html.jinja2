@@ -1,0 +1,18 @@
+{% extends "base.html.jinja2" %}
+
+{% block page_body %}
+<div>
+<h1>Available Languages</h1>
+{% for language in languages %}
+    <div>
+    <h2>{{ language.name }}</h2>
+    <p>
+    {% if language.notes is not none %}
+        {{ language.notes }}
+    {%- endif %}
+    <a href="/languages/{{ language.slug }}/decks">Language Flash Card Decks</a>
+    </p>
+    </div>
+{%- endfor %}
+</div>
+{% endblock %}

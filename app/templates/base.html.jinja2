@@ -8,6 +8,14 @@
     {% endblock %}
 </head>
 <body>
+{% block navbar -%}
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/languages/list">Languages</a></li>
+        </ul>
+    </nav>
+{%- endblock navbar %}
 {% block page_body %}{% endblock page_body %}
 </body>
 </html>
