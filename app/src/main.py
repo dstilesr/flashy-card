@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.controllers import base_router
+from app.routes import base_router
 
 app = FastAPI(
     title="Flashy Card App",
