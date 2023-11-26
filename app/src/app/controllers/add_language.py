@@ -36,7 +36,7 @@ class AddLanguagePost(BaseController):
                 {"name": name, "notes": notes}
             )
 
-        return RedirectResponse("/languages/list")
+        return RedirectResponse("/languages/list", status_code=302)
 
 
 class AddLanguagePage(BaseController):

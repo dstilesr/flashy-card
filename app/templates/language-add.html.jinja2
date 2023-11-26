@@ -4,14 +4,14 @@
 <h1>Add New Language to List</h1>
 <form id="addLanguage" action="/languages/add" method="post">
     <div>
-        <label for="languageName">Language Name:</label>
-        <input type="text" id="languageName">
+        <label for="lang_name">Language Name:</label>
+        <input type="text" id="lang_name" name="lang_name">
     </div>
     <div>
-        <label for="languageNotes">Personal Notes on the Language:</label>
-        <textarea id="languageNotes" rows="4"></textarea>
+        <label for="lang_notes">Personal Notes on the Language:</label>
+        <textarea id="lang_notes" name="lang_notes" rows="4"></textarea>
     </div>
+    <input type="submit" form="addLanguage">
 </form>
-<button type="submit" form="addLanguage" value="Add Language">Add Language</button>
 </div>
 {% endblock %}
