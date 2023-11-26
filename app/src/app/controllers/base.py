@@ -41,7 +41,7 @@ class BaseController(ABC):
         return self.__template_env
 
     @abstractmethod
-    async def process_request(self) -> Response:
+    async def process_request(self, **kwargs) -> Response:
         """
         Process request and return a response.
         :return:

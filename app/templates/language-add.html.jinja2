@@ -1,0 +1,17 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div>
+<h1>Add New Language to List</h1>
+<form id="addLanguage" action="/languages/add" method="post">
+    <div>
+        <label for="languageName">Language Name:</label>
+        <input type="text" id="languageName">
+    </div>
+    <div>
+        <label for="languageNotes">Personal Notes on the Language:</label>
+        <textarea id="languageNotes" rows="4"></textarea>
+    </div>
+</form>
+<button type="submit" form="addLanguage" value="Add Language">Add Language</button>
+</div>
+{% endblock %}
