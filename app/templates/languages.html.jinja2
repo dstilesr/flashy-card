@@ -1,7 +1,9 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
 <div>
-<h1>Available Languages</h1>
+    <h1>Available Languages</h1>
+</div>
+<div>
 {% for language in languages %}
     <div>
     <h2>{{ language.name }}</h2>

@@ -16,6 +16,6 @@
 {%- endfor %}
 </div>
 <div>
-    <a href="/cards/add">Add New Card</a>
+    <a href="/cards/add{% if language_id is defined %}?language_id={{ language_id }}{% endif %}">Add New Card</a>
 </div>
 {% endblock %}

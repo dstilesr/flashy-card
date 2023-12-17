@@ -16,8 +16,8 @@ class ListCardsLang(BaseController):
     def __init__(
             self,
             engine: sa_async.AsyncEngine,
-            template_env: Optional[jinja2.Environment] = None,
-            language_slug: Optional[str] = None):
+            language_slug: str,
+            template_env: Optional[jinja2.Environment] = None):
         """
         :param engine:
         :param template_env:
@@ -68,6 +68,7 @@ class ListCardsLang(BaseController):
         template = self.template_env.get_template("card-list.html.jinja2")
         rsp_body = template.render(
             list_title="List of Cards for %s Language" % language.name,
-            cards=items
+            cards=items,
+            language_id=language.id
         )
         return HTMLResponse(rsp_body)
