@@ -13,6 +13,13 @@
                     name="word" value="{% if card is defined %}card.word{% endif %}">
         </div>
         <div>
+            <label for="translation">Target Word:</label>
+            <input
+                    type="text"
+                    id="translation"
+                    name="translation" value="{% if card is defined %}card.translation{% endif %}">
+        </div>
+        <div>
             <label for="part_of_speech">Part of Speech</label>
             <select id="part_of_speech" name="part_of_speech">
                 {% for option in parts_of_speech -%}
@@ -38,6 +45,9 @@
             <input type="hidden" name="language_id" value="{{ language_id }}">
             {% endif -%}
         </div>
+        {% if card is defined -%}
+            <input id="card_id" name="card_id" value="{{ card.id }}" type="hidden">
+        {%- endif %}
         <br>
         <input type="submit" form="addOrEditCard" value="{% if card is defined %}Edit{% else %}Create{% endif %}">
     </form>
