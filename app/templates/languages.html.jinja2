@@ -9,7 +9,11 @@
     {% if language.notes is not none %}
         {{ language.notes }}
     {%- endif %}
-    <a href="/languages/{{ language.slug }}/decks">Language Flash Card Decks</a>
+    <h3>Links</h3>
+    <ul>
+        <li><a href="/decks/{{ language.slug }}/list">{{ language.name }} Flash Card Decks</a></li>
+        <li><a href="/cards/{{ language.slug }}/list">All {{ language.name }} Cards</a></li>
+    </ul>
     </p>
     </div>
 {%- endfor %}

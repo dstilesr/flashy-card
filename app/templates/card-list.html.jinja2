@@ -1,0 +1,20 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div>
+<h1>{{ list_title }}</h1>
+{%- for card in cards %}
+    <div>
+    <h2>{{ card.word }}</h2>
+    <p>
+        {{ card.word }} ({{ card.part_of_speech }}): {{ card.translation }}<br>
+        {% if card.sentence is not none -%}
+        {{ card.sentence }}
+        {%- endif %}
+    </p>
+    </div>
+{%- endfor %}
+</div>
+<div>
+    <a href="/cards/add">Add New Card</a>
+</div>
+{% endblock %}
