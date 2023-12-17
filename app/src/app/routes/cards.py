@@ -6,6 +6,7 @@ from ..db import DB_ENGINE
 from ..enums import PartOfSpeech
 from ..controllers.add_edit_card import EditCard
 from ..controllers.list_cards import ListCardsLang
+from ..controllers.edit_card_page import EditCardPage
 
 card_router = APIRouter()
 
@@ -19,6 +20,18 @@ async def list_cards_language(language_slug: str) -> HTMLResponse:
     """
     controller = ListCardsLang(DB_ENGINE, language_slug=language_slug)
     rsp = await controller.process_request()
+    return rsp
+
+
+@card_router.get("/add")
+async def add_card_page(language_id: Optional[int] = None) -> HTMLResponse:
+    """
+    Page for adding new card form.
+    :param language_id:
+    :return:
+    """
+    handler = EditCardPage(DB_ENGINE, language_id=language_id)
+    rsp = await handler.process_request()
     return rsp
 
 

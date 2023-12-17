@@ -68,8 +68,8 @@ class EditCard(BaseController):
                 )
             await s.commit()
             res = await s.scalars(
-                s.select(m.Language)
-                .where(m.Language.id == self.args["language_id"])
+                sa.select(m.Language)
+                .where(m.Language.id == self.args["target_language_id"])
             )
             lang = res.one()
 
