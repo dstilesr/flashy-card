@@ -23,7 +23,9 @@
             <label for="part_of_speech">Part of Speech</label>
             <select id="part_of_speech" name="part_of_speech">
                 {% for option in parts_of_speech -%}
-                <option value="{{ option }}">{{ option }}</option>
+                <option value="{{ option }}" {% if card is defined and option == card.part_of_speech -%}
+                            selected="selected"
+                        {%- endif %}>{{ option }}</option>
                 {%- endfor %}
             </select>
         </div>

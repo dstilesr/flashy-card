@@ -6,7 +6,7 @@
     <div>
     <h2>{{ card.word }}</h2>
     <p>
-        {{ card.word }} ({{ card.part_of_speech }}): {{ card.translation }}<br>
+        <b>{{ card.word }} ({{ card.part_of_speech }}):</b> {{ card.translation }}<br>
         {% if card.sentence is not none -%}
         <b>Example:</b> {{ card.sentence }}<br>
         {%- endif %}
