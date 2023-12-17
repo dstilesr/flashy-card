@@ -1,0 +1,45 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div>
+    <h1>
+        {% if card is defined %}Edit{% else %}Create{% endif %} Flash Card
+    </h1>
+    <form id="addOrEditCard" action="/cards/edit" method="post">
+        <div>
+            <label for="word">Target Word:</label>
+            <input
+                    type="text"
+                    id="word"
+                    name="word" value="{% if card is defined %}card.word{% endif %}">
+        </div>
+        <div>
+            <label for="part_of_speech">Part of Speech</label>
+            <select id="part_of_speech" name="part_of_speech">
+                {% for option in parts_of_speech -%}
+                <option value="{{ option }}">{{ option }}</option>
+                {%- endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="sentence">Example Sentence</label>
+            <textarea id="sentence" name="sentence" rows="3">{% if card is defined -%}
+                {{ card.sentence }}
+            {%- endif %}</textarea>
+        </div>
+        <div>
+            {%- if language_id is none %}
+            <label for="language_id">Language</label>
+            <select id="language_id" name="language_id">
+                {% for lang in languages -%}
+                <option value="{{ lang.id }}">{{ lang.name }}</option>
+                {%- endfor %}
+            </select>
+            {% else %}
+            <input type="hidden" name="language_id" value="{{ language_id }}">
+            {% endif -%}
+        </div>
+        <br>
+        <input type="submit" form="addOrEditCard" value="{% if card is defined %}Edit{% else %}Create{% endif %}">
+    </form>
+</div>
+{% endblock %}
