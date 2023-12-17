@@ -17,4 +17,4 @@ async def list_cards_language(language_slug: str) -> HTMLResponse:
     """
     controller = ListCardsLang(DB_ENGINE, language_slug=language_slug)
     rsp = await controller.process_request()
-    return HTMLResponse(rsp, 200)
+    return rsp
