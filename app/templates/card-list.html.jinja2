@@ -8,8 +8,9 @@
     <p>
         {{ card.word }} ({{ card.part_of_speech }}): {{ card.translation }}<br>
         {% if card.sentence is not none -%}
-        <b>Example:</b> {{ card.sentence }}
+        <b>Example:</b> {{ card.sentence }}<br>
         {%- endif %}
+        <a href="/cards/{{ card.id }}/edit">Edit Card</a>
     </p>
     </div>
 {%- endfor %}

@@ -17,7 +17,7 @@
             <input
                     type="text"
                     id="translation"
-                    name="translation" value="{% if card is defined %}card.translation{% endif %}">
+                    name="translation" value="{% if card is defined %}{{ card.translation }}{% endif %}">
         </div>
         <div>
             <label for="part_of_speech">Part of Speech</label>

@@ -35,6 +35,18 @@ async def add_card_page(language_id: Optional[int] = None) -> HTMLResponse:
     return rsp
 
 
+@card_router.get("/{card_id}/edit")
+async def edit_card_page(card_id: int) -> HTMLResponse:
+    """
+    Page for editing card form.
+    :param card_id:
+    :return:
+    """
+    handler = EditCardPage(DB_ENGINE, card_id=card_id)
+    rsp = await handler.process_request()
+    return rsp
+
+
 @card_router.post("/add")
 async def add_card(
         word: Annotated[str, Form()],

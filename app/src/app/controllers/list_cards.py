@@ -57,10 +57,12 @@ class ListCardsLang(BaseController):
             )
             async for card in cards:
                 items.append({
+                    "id": card.id,
                     "word": card.target_word,
                     "part_of_speech": card.part_of_speech,
                     "translation": card.translation,
-                    "sentence": card.sentence
+                    "sentence": card.sentence,
+                    "target_language_id": card.target_language_id
                 })
 
         template = self.template_env.get_template("card-list.html.jinja2")
