@@ -18,6 +18,8 @@ services:
       - app/.env.example
     ports:
       - "3000:3000"
+    volumes:
+      - "./app/templates:/app/templates"
 
 volumes:
   flashy-card-db:
