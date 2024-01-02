@@ -21,7 +21,7 @@ class ListLanguages(BaseController):
         :param template_env:
         """
         super().__init__(engine, template_env)
-        self.crud = LanguageCRUD()
+        self.crud = LanguageCRUD(self.engine)
 
     async def process_request(self) -> HTMLResponse:
         """
@@ -29,14 +29,13 @@ class ListLanguages(BaseController):
         :return:
         """
         items = []
-        async with sa_async.AsyncSession(self.engine) as session:
-            languages = await self.crud.list_items(session)
-            async for lang in languages:
-                items.append({
-                    "name": lang.name,
-                    "notes": lang.notes,
-                    "slug": lang.slug
-                })
+        languages = await self.crud.list_items()
+        for lang in languages:
+            items.append({
+                "name": lang.name,
+                "notes": lang.notes,
+                "slug": lang.slug
+            })
 
         template = self.template_env.get_template("languages.html.jinja2")
         rsp_body = template.render(

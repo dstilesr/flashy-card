@@ -21,7 +21,7 @@ class AddLanguagePost(BaseController):
         :param template_env:
         """
         super().__init__(engine, template_env)
-        self.crud = LanguageCRUD()
+        self.crud = LanguageCRUD(self.engine)
 
     async def process_request(self, name: str, notes: str) -> RedirectResponse:
         """
@@ -30,12 +30,9 @@ class AddLanguagePost(BaseController):
         :param notes:
         :return:
         """
-        async with sa_async.AsyncSession(self.engine) as session:
-            await self.crud.create(
-                session,
-                {"name": name, "notes": notes}
-            )
-
+        _ = await self.crud.create(
+            {"name": name, "notes": notes}
+        )
         return RedirectResponse("/languages/list", status_code=302)
 
 
