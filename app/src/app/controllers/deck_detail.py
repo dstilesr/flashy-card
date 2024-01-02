@@ -40,8 +40,7 @@ class DeckDetail(BaseController):
                 .options(orm.subqueryload(m.CardDeck.language))
             res = await session.scalars(stmt)
             deck = res.one_or_none()
-            if deck is None:
-                raise err.ResourceNotFound("Deck not found!")
+            self.check_null(deck, "Deck")
 
             content = self.template_env\
                 .get_template("deck-detail.html.jinja2")\

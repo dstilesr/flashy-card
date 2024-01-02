@@ -50,8 +50,7 @@ class AddRemoveFromDeck(BaseController):
             )
         )
         card = res.one_or_none()
-        if card is None:
-            raise err.ResourceNotFound("Card not found!")
+        self.check_null(card, "Card")
         return card
 
     async def process_request(self) -> RedirectResponse:
@@ -64,8 +63,7 @@ class AddRemoveFromDeck(BaseController):
             res = await session.scalars(stmt)
             card = await self.get_card(session)
             deck = res.one_or_none()
-            if deck is None:
-                raise err.ResourceNotFound("Card deck not found!")
+            self.check_null(deck, "Deck")
             deck_id = self.deck_id
 
             if self.remove:

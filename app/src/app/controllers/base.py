@@ -6,6 +6,9 @@ from fastapi.responses import Response
 from ..template_util import TEMPLATE_ENV
 from sqlalchemy.ext.asyncio import AsyncEngine
 
+from .. import models as m
+from .. import exceptions as err
+
 
 class BaseController(ABC):
     """
@@ -47,3 +50,14 @@ class BaseController(ABC):
         :return:
         """
         pass
+
+    @staticmethod
+    def check_null(obj: Optional[m.Base], obj_type: str):
+        """
+        Check if the object is null and raise an error if it is.
+        :param obj:
+        :param obj_type:
+        :return:
+        """
+        if obj is None:
+            raise err.ResourceNotFound("%s not found!" % obj_type)
