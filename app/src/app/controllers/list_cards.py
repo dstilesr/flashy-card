@@ -54,7 +54,7 @@ class ListCardsLang(BaseController):
         language = await self.get_language()
 
         filters = {
-            "language_id": language.id,
+            "target_language_id": language.id,
             "deleted_at": None
         }
         if self.pos is not None:
