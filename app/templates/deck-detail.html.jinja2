@@ -12,6 +12,7 @@
         <b>Updated:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
     </p>
 </div>
+{%- if deck.cards|length > 0 %}
 <div id="studyDeckLinks">
     <h2>Study with Deck</h2>
     <a href="/study/{{ deck.id }}/from-target">
@@ -40,6 +41,7 @@
     {% endfor -%}
     </ul>
 </div>
+{% endif -%}
 <div id="editLinks">
     <h2>Edit Deck</h2>
     <ul>
