@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 
 from .base import BaseController
 from ..enums import PartOfSpeech
+from ..crud_utils.cards import CardsCRUD
 
 
 class ListCardsLang(BaseController):
@@ -29,6 +30,7 @@ class ListCardsLang(BaseController):
         super().__init__(engine, template_env)
         self.language_slug = language_slug
         self.pos = part_of_speech
+        self.__crud = CardsCRUD(self.engine)
 
     async def get_language(self) -> m.Language:
         """
@@ -51,27 +53,22 @@ class ListCardsLang(BaseController):
         items = []
         language = await self.get_language()
 
-        filters = (
-            (m.FlashCard.target_language_id == language.id)
-            & m.FlashCard.deleted_at.is_(None)
-        )
+        filters = {
+            "language_id": language.id,
+            "deleted_at": None
+        }
         if self.pos is not None:
-            filters = filters & (m.FlashCard.part_of_speech == self.pos)
-        async with sa_async.AsyncSession(self.engine) as session:
-            cards = await session.stream_scalars(
-                sa.select(m.FlashCard)
-                .where(filters)
-                .order_by(m.FlashCard.created_at)
-            )
-            async for card in cards:
-                items.append({
-                    "id": card.id,
-                    "word": card.target_word,
-                    "part_of_speech": card.part_of_speech,
-                    "translation": card.translation,
-                    "sentence": card.sentence,
-                    "target_language_id": card.target_language_id
-                })
+            filters.update(part_of_speech=self.pos)
+        cards = await self.__crud.list_items(**filters)
+        for card in cards:
+            items.append({
+                "id": card.id,
+                "word": card.target_word,
+                "part_of_speech": card.part_of_speech,
+                "translation": card.translation,
+                "sentence": card.sentence,
+                "target_language_id": card.target_language_id
+            })
 
         template = self.template_env.get_template("card-list.html.jinja2")
         rsp_body = template.render(
