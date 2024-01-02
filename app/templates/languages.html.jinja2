@@ -1,22 +1,38 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
-<div>
+<div class="container-md">
     <h1>Available Languages</h1>
 </div>
-<div>
+<div class="container-md">
 {% for language in languages %}
-    <div>
-    <h2>{{ language.name }}</h2>
-    {% if language.notes is not none %}
-        {{ language.notes }}
-    {%- endif %}
-    <h3>Links</h3>
-    <ul>
-        <li><a href="/decks/{{ language.slug }}/list">{{ language.name }} Flash Card Decks</a></li>
-        <li><a href="/cards/{{ language.slug }}/list">All {{ language.name }} Cards</a></li>
-    </ul>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ language.name }}</h2>
+            {% if language.notes is not none %}
+                {{ language.notes }}
+            {%- endif %}
+        </div>
+        <div class="card-body">
+            <h3 class="card-subtitle">Links</h3>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a class="btn btn-outline-secondary" href="/decks/{{ language.slug }}/list">
+                        {{ language.name }} Flash Card Decks
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a class="btn btn-outline-secondary" href="/cards/{{ language.slug }}/list">
+                        All {{ language.name }} Cards
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 {%- endfor %}
-<a href="/languages/add">Add New Language</a>
+<div class="card">
+    <p class="card-body">
+        <a class="btn btn-outline-primary" href="/languages/add">Add New Language</a>
+    </p>
+</div>
 </div>
 {% endblock %}

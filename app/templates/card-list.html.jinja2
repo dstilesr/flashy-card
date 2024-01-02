@@ -1,21 +1,23 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
-<div>
+<div class="container-md">
 <h1>{{ list_title }}</h1>
 {%- for card in cards %}
-    <div>
-    <h2>{{ card.word }}</h2>
-    <p>
-        <b>{{ card.word }} ({{ card.part_of_speech }}):</b> {{ card.translation }}<br>
-        {% if card.sentence is not none -%}
-        <b>Example:</b> {{ card.sentence }}<br>
-        {%- endif %}
-        <a href="/cards/{{ card.id }}/edit">Edit Card</a>
-    </p>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ card.word }}</h2>
+            <b>{{ card.word }} ({{ card.part_of_speech }}):</b> {{ card.translation }}<br>
+            {% if card.sentence is not none -%}
+            <b>Example:</b> {{ card.sentence }}<br>
+            {%- endif %}
+            <a class="btn btn-outline-secondary" href="/cards/{{ card.id }}/edit">Edit Card</a>
+        </div>
     </div>
 {%- endfor %}
 </div>
-<div>
-    <a href="/cards/add{% if language_id is defined %}?language_id={{ language_id }}{% endif %}">Add New Card</a>
+<div class="container-md">
+    <a class="btn btn-outline-primary" href="/cards/add{% if language_id is defined %}?language_id={{ language_id }}{% endif %}">
+        Add New Card
+    </a>
 </div>
 {% endblock %}
