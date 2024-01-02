@@ -83,3 +83,4 @@ class CardsCRUD(BaseCrud):
                 .where(FlashCard.id == card_id)
                 .values(deleted_at=datetime.utcnow())
             )
+            await session.commit()

@@ -5,6 +5,9 @@
 </div>
 <div id="detailsFormContainer">
     <form id="deckDetailsForm" action="{% if deck is defined %}/decks/{{ deck.id }}/edit{% else %}/decks/add{% endif %}" method="post">
+        {%- if deck is defined %}
+        <input type="hidden" id="deck_id" name="deck_id" value="{{ deck.id }}">
+        {% endif -%}
         <div>
             <label for="name">Deck Name</label>
             <input type="text" id="name" name="name" {% if deck is defined %}value="{{ deck.name }}"{% endif %}>

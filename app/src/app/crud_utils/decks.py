@@ -94,3 +94,4 @@ class DecksCRUD(BaseCrud):
             )
             if res.rowcount == 0:
                 raise err.ResourceNotFound("Found no card deck to delete!")
+            await session.commit()

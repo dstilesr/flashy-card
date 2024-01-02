@@ -103,3 +103,5 @@ class LanguageCRUD(BaseCrud):
             res = await session.execute(stmt)
             if res.rowcount == 0:
                 raise err.ResourceNotFound("Found no 'Language' to delete!")
+
+            await session.commit()

@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from ..db import DB_ENGINE
 from ..controllers.list_decks import ListDecksLang
+from ..controllers.add_edit_deck import EditCardDeck
 from ..controllers.add_edit_deck_page import AddEditDeckPage
 
 deck_router = APIRouter()
@@ -33,13 +34,60 @@ async def add_card_deck(language_id: Optional[int] = None) -> HTMLResponse:
     return rsp
 
 
+@deck_router.post("/add")
+async def add_card_deck(
+        name: Annotated[str, Form()],
+        context: Annotated[str, Form()],
+        language_id: Annotated[int, Form()]) -> RedirectResponse:
+    """
+    Add new card deck.
+    :param name:
+    :param context:
+    :param language_id:
+    :return:
+    """
+    handler = EditCardDeck(
+        DB_ENGINE,
+        name,
+        context,
+        language_id,
+    )
+    rsp = await handler.process_request()
+    return rsp
+
+
 @deck_router.get("/{deck_id}/edit")
-async def edit_card_deck(deck_id: int) -> HTMLResponse:
+async def edit_card_deck_page(deck_id: int) -> HTMLResponse:
     """
     Render page to edit a card deck.
     :param deck_id:
     :return:
     """
     handler = AddEditDeckPage(DB_ENGINE, deck_id=deck_id)
+    rsp = await handler.process_request()
+    return rsp
+
+
+@deck_router.post("/{deck_id}/edit")
+async def edit_card_deck(
+        deck_id: int,
+        name: Annotated[str, Form()],
+        context: Annotated[str, Form()],
+        language_id: Annotated[int, Form()]) -> RedirectResponse:
+    """
+    Edit existing card deck.
+    :param name:
+    :param context:
+    :param language_id:
+    :param deck_id:
+    :return:
+    """
+    handler = EditCardDeck(
+        DB_ENGINE,
+        name,
+        context,
+        language_id,
+        deck_id
+    )
     rsp = await handler.process_request()
     return rsp
