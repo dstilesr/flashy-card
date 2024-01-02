@@ -1,48 +1,58 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
-<div>
+<div class="container-md">
     <h1>{% if deck is defined %}Edit '{{ deck.name }}'{% else %}Create New Deck{% endif %}</h1>
 </div>
-<div id="detailsFormContainer">
-    <form id="deckDetailsForm" action="{% if deck is defined %}/decks/{{ deck.id }}/edit{% else %}/decks/add{% endif %}" method="post">
-        {%- if deck is defined %}
-        <input type="hidden" id="deck_id" name="deck_id" value="{{ deck.id }}">
-        {% endif -%}
-        <div>
-            <label for="name">Deck Name</label>
-            <input type="text" id="name" name="name" {% if deck is defined %}value="{{ deck.name }}"{% endif %}>
+<div class="container-md" id="detailsFormContainer">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Deck Details</h3>
         </div>
-        <div>
-            <label for="context">Deck Context</label>
-            <input type="text" id="context" name="context" {% if deck is defined %}value="{{ deck.context }}"{% endif %}>
-        </div>
-        {%- if language_id is not defined or language_id is none %}
-        <div>
-            <label for="language_id">Language</label>
-            <select id="language_id" name="language_id">
-                {% for lang in languages -%}
-                <option value="{{ lang.id }}">{{ lang.name }}</option>
-                {%- endfor %}
-            </select>
-        </div>
-        {% else %}
-        <input type="hidden" id="language_id" name="language_id" value="{{ language_id }}">
-        {% endif -%}
-        <div>
-            <input
-                    id="submitForm"
-                    type="submit"
-                    form="deckDetailsForm"
-                    value="{% if deck is defined %}Submit Changes{% else %}Create{% endif %}">
-        </div>
-    </form>
+        <form id="deckDetailsForm" action="{% if deck is defined %}/decks/{{ deck.id }}/edit{% else %}/decks/add{% endif %}" method="post">
+            {%- if deck is defined %}
+            <input type="hidden" id="deck_id" name="deck_id" value="{{ deck.id }}">
+            {% endif -%}
+            <div class="card-body">
+                <label class="form-label" for="name">Deck Name</label>
+                <input class="form-control" type="text" id="name" name="name" {% if deck is defined %}value="{{ deck.name }}"{% endif %}>
+            </div>
+            <div class="card-body">
+                <label class="form-label" for="context">Deck Context</label>
+                <input class="form-control" type="text" id="context" name="context" {% if deck is defined %}value="{{ deck.context }}"{% endif %}>
+            </div>
+            {%- if language_id is not defined or language_id is none %}
+            <div class="card-body">
+                <label class="form-label" for="language_id">Language</label>
+                <select class="form-select" id="language_id" name="language_id">
+                    {% for lang in languages -%}
+                    <option value="{{ lang.id }}">{{ lang.name }}</option>
+                    {%- endfor %}
+                </select>
+            </div>
+            {% else %}
+            <input type="hidden" id="language_id" name="language_id" value="{{ language_id }}">
+            {% endif -%}
+            <div class="card-body">
+                <input  class="btn btn-primary"
+                        id="submitForm"
+                        type="submit"
+                        form="deckDetailsForm"
+                        value="{% if deck is defined %}Submit Changes{% else %}Create{% endif %}">
+            </div>
+        </form>
+    </div>
 </div>
 {%- if deck is defined %}
-<div id="addRemoveCardLinks">
-    <ul>
-        <li><a href="/decks/{{ deck.id }}/add-cards">Add Cards</a></li>
-        <li><a href="/decks/{{ deck.id }}/remove-cards">Remove Cards</a></li>
-    </ul>
+<div class="container-md" id="addRemoveCardLinks">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Add or Remove Cards</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="/decks/{{ deck.id }}/add-cards">Add Cards</a></li>
+                <li class="list-group-item"><a href="/decks/{{ deck.id }}/remove-cards">Remove Cards</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 {% endif -%}
 {% endblock %}
