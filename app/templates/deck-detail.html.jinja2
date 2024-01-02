@@ -1,4 +1,12 @@
 {% extends "base.html.jinja2" %}
+{% block navbar_links %}
+        {{- super() }}
+        <li class="nav-item">
+            <a class="nav-link" href="/decks/{{ deck.language.slug }}/list">
+                All {{ deck.language.name }} Decks
+            </a>
+        </li>
+{% endblock navbar_links %}
 {% block page_body %}
 <div class="container-md" id="pageTitle">
     <h1>Deck Details: {{ deck.name }}</h1>
