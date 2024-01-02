@@ -9,9 +9,10 @@
     {% endblock %}
 </head>
 <body>
-{% block navbar -%}
+<div class="container-md" id="mainNavbarContainer">
 <nav class="navbar navbar-expand-lg">
     <ul class="navbar-nav">
+        {%- block navbar_links %}
         <li class="nav-item">
             <a href="/" class="nav-link">
                 Home
@@ -27,9 +28,10 @@
                 Create Flash Cards
             </a>
         </li>
+        {% endblock navbar_links -%}
     </ul>
 </nav>
-{%- endblock navbar %}
+</div>
 {% block page_body %}{% endblock page_body %}
 </body>
 </html>
