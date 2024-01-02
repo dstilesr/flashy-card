@@ -1,27 +1,29 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
-<div>
-    <h1>
-        {% if card is defined %}Edit{% else %}Create{% endif %} Flash Card
-    </h1>
+<div class="container-fluid">
+    <div class="container-md">
+        <h1>
+            {% if card is defined %}Edit{% else %}Create{% endif %} Flash Card
+        </h1>
+    </div>
     <form id="addOrEditCard" action="/cards/{% if card is defined %}{{ card.id }}/edit{% else %}add{% endif %}" method="post">
-        <div>
-            <label for="word">Target Word:</label>
-            <input
+        <div class="container-md">
+            <label for="word" class="form-label">Target Word:</label>
+            <input  class="form-control"
                     type="text"
                     id="word"
                     name="word" value="{% if card is defined %}{{ card.word }}{% endif %}">
         </div>
-        <div>
-            <label for="translation">Translation:</label>
-            <input
+        <div class="container-md">
+            <label for="translation" class="form-label">Translation:</label>
+            <input  class="form-control"
                     type="text"
                     id="translation"
                     name="translation" value="{% if card is defined %}{{ card.translation }}{% endif %}">
         </div>
-        <div>
-            <label for="part_of_speech">Part of Speech</label>
-            <select id="part_of_speech" name="part_of_speech">
+        <div class="container-md">
+            <label for="part_of_speech" class="form-label">Part of Speech</label>
+            <select class="form-select" id="part_of_speech" name="part_of_speech">
                 {% for option in parts_of_speech -%}
                 <option value="{{ option }}" {% if card is defined and option == card.part_of_speech -%}
                             selected="selected"
@@ -29,16 +31,16 @@
                 {%- endfor %}
             </select>
         </div>
-        <div>
-            <label for="sentence">Example Sentence</label>
-            <textarea id="sentence" name="sentence" rows="3">{% if card is defined -%}
+        <div class="container-md">
+            <label for="sentence" class="form-label">Example Sentence</label>
+            <textarea class="form-control" id="sentence" name="sentence" rows="3">{% if card is defined -%}
                 {{ card.sentence }}
             {%- endif %}</textarea>
         </div>
-        <div>
+        <div class="container-md">
             {%- if language_id is none %}
-            <label for="language_id">Language</label>
-            <select id="language_id" name="language_id">
+            <label for="language_id" class="form-label">Language</label>
+            <select class="form-select" id="language_id" name="language_id">
                 {% for lang in languages -%}
                 <option value="{{ lang.id }}">{{ lang.name }}</option>
                 {%- endfor %}
@@ -51,7 +53,9 @@
             <input id="card_id" name="card_id" value="{{ card.id }}" type="hidden">
         {%- endif %}
         <br>
-        <input type="submit" form="addOrEditCard" value="{% if card is defined %}Edit{% else %}Create{% endif %}">
+        <div class="container-md">
+             <input class="btn btn-primary" type="submit" form="addOrEditCard" value="{% if card is defined %}Edit{% else %}Create{% endif %}">
+        </div>
     </form>
 </div>
 {% endblock %}
