@@ -95,6 +95,7 @@ class CardDeck(Base):
     # Dates
     created_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
     updated_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
+    deleted_at: Mapped[Optional[datetime]]
 
     # Relationships
     language: Mapped["Language"] = relationship(back_populates="decks")
