@@ -7,7 +7,6 @@
 {% for language in languages %}
     <div>
     <h2>{{ language.name }}</h2>
-    <p>
     {% if language.notes is not none %}
         {{ language.notes }}
     {%- endif %}
@@ -16,7 +15,6 @@
         <li><a href="/decks/{{ language.slug }}/list">{{ language.name }} Flash Card Decks</a></li>
         <li><a href="/cards/{{ language.slug }}/list">All {{ language.name }} Cards</a></li>
     </ul>
-    </p>
     </div>
 {%- endfor %}
 <a href="/languages/add">Add New Language</a>

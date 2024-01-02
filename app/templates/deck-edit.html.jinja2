@@ -1,0 +1,45 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div>
+    <h1>{% if deck is defined %}Edit '{{ deck.name }}'{% else %}Create New Deck{% endif %}</h1>
+</div>
+<div id="detailsFormContainer">
+    <form id="deckDetailsForm" action="{% if deck is defined %}/decks/{{ deck.id }}/edit{% else %}/decks/add{% endif %}" method="post">
+        <div>
+            <label for="name">Deck Name</label>
+            <input type="text" id="name" name="name" {% if deck is defined %}value="{{ deck.name }}"{% endif %}>
+        </div>
+        <div>
+            <label for="context">Deck Context</label>
+            <input type="text" id="context" name="context" {% if deck is defined %}value="{{ deck.context }}"{% endif %}>
+        </div>
+        {%- if language_id is not defined or language_id is none %}
+        <div>
+            <label for="language_id">Language</label>
+            <select id="language_id" name="language_id">
+                {% for lang in languages -%}
+                <option value="{{ lang.id }}">{{ lang.name }}</option>
+                {%- endfor %}
+            </select>
+        </div>
+        {% else %}
+        <input type="hidden" id="language_id" name="language_id" value="{{ language_id }}">
+        {% endif -%}
+        <div>
+            <input
+                    id="submitForm"
+                    type="submit"
+                    form="deckDetailsForm"
+                    value="{% if deck is defined %}Submit Changes{% else %}Create{% endif %}">
+        </div>
+    </form>
+</div>
+{%- if deck is defined %}
+<div id="addRemoveCardLinks">
+    <ul>
+        <li><a href="/decks/{{ deck.id }}/add-cards">Add Cards</a></li>
+        <li><a href="/decks/{{ deck.id }}/remove-cards">Remove Cards</a></li>
+    </ul>
+</div>
+{% endif -%}
+{% endblock %}

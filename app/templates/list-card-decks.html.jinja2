@@ -1,0 +1,19 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div>
+<h1>Card Decks</h1>
+{%- for deck in decks %}
+    <div>
+    <h2>{{ deck.name }}</h2>
+    <p>
+        <b>Context:</b> {{ deck.context }}<br>
+        <b>Total Cards:</b> {{ deck.total_cards }}<br>
+        <a href="/decks/{{ card.id }}/edit">Edit Deck</a>
+    </p>
+    </div>
+{%- endfor %}
+</div>
+<div>
+    <a href="/decks/add{% if language_id is defined %}?language_id={{ language_id }}{% endif %}">Add New Deck</a>
+</div>
+{% endblock %}
