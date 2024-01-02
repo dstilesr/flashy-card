@@ -10,13 +10,12 @@
 <div id="titleSection">
     <h1>Flash Cards Study</h1>
     <h2>Mode: {{ study_mode_display() }}</h2>
-    <h2>{{ deck.name }} - Card {{ idx }} of {{ total_cards }}</h2>
 </div>
 <div id="cardDetail">
-    <h2>Card</h2>
-    <h3>
+    <h2>
         {%- if to_target %}{{ card.translation }}{% else %}{{ card.target_word }}{% endif -%}
-    </h3>
+    </h2>
+    <h3>{{ deck.name }} - Card {{ idx }} of {{ total_cards }}</h3>
     <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
     <section id="actionsSection">
         <h3>Actions</h3>
