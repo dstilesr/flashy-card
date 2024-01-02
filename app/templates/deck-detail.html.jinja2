@@ -1,0 +1,48 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div id="pageTitle">
+    <h1>Deck Details: {{ deck.name }}</h1>
+</div>
+<div id="basicDetails">
+    <h2>Deck Details:</h2>
+    <p>
+        <b>Language:</b>{{ deck.language.name }}<br>
+        <b>Context:</b>{{ deck.context }}<br>
+        <b>Created:</b>{{ "{dt:%Y-%m-%d}".format(dt=deck.created_at) }}<br>
+        <b>Updated:</b>{{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
+    </p>
+</div>
+<div id="cardDetails">
+    <h2>Flash Cards</h2>
+    <ul>
+    {%- for card in deck.cards %}
+        <li>
+            <div>
+                <h3>{{ card.target_word }}</h3>
+                <p>
+                    <b>Part of Speech:</b>{{ card.part_of_speech }}<br>
+                    <b>Translation:</b>{{ card.translation }}<br>
+                    {%- if card.sentence is not none %}
+                    <b>Example:</b> {{ card.sentence }}<br>
+                    {% endif -%}
+                </p>
+            </div>
+        </li>
+    {% endfor -%}
+    </ul>
+</div>
+<div id="editLinks">
+    <h2>Edit Deck</h2>
+    <ul>
+        <li>
+            <a href="/decks/{{ deck.id }}/edit">Edit Deck Details</a>
+        </li>
+        <li>
+            <a href="/decks/{{ deck.id }}/add-cards">Add Cards to Deck</a>
+        </li>
+        <li>
+            <a href="/decks/{{ deck.id }}/remove-cards">Remove Cards from Deck</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
