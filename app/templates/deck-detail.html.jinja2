@@ -12,6 +12,15 @@
         <b>Updated:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
     </p>
 </div>
+<div id="studyDeckLinks">
+    <h2>Study with Deck</h2>
+    <a href="/study/{{ deck.id }}/from-target">
+        Study from target to source language.
+    </a><br>
+    <a href="/study/{{ deck.id }}/to-target">
+        Study from source to target language.
+    </a>
+</div>
 <div id="cardDetails">
     <h2>Flash Cards</h2>
     <ul>
