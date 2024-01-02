@@ -1,59 +1,79 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
-<div id="pageTitle">
+<div class="container-md" id="pageTitle">
     <h1>Deck Details: {{ deck.name }}</h1>
 </div>
-<div id="basicDetails">
-    <h2>Deck Details:</h2>
-    <p>
-        <b>Language:</b> {{ deck.language.name }}<br>
-        <b>Context:</b> {{ deck.context }}<br>
-        <b>Created:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.created_at) }}<br>
-        <b>Updated:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
-    </p>
+<div class="container-md" id="basicDetails">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Deck Details:</h2>
+            <b>Language:</b> {{ deck.language.name }}<br>
+            <b>Context:</b> {{ deck.context }}<br>
+            <b>Created:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.created_at) }}<br>
+            <b>Updated:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
+        </div>
+    </div>
 </div>
 {%- if deck.cards|length > 0 %}
-<div id="studyDeckLinks">
-    <h2>Study with Deck</h2>
-    <a href="/study/{{ deck.id }}/from-target">
-        Study from target to source language.
-    </a><br>
-    <a href="/study/{{ deck.id }}/to-target">
-        Study from source to target language.
-    </a>
+<div class="container-md" id="studyDeckLinks">
+    <div class="card">
+        <div class="card-body">
+            <h2>Study with Deck</h2>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="/study/{{ deck.id }}/from-target">
+                        Study from target to source language.
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/study/{{ deck.id }}/to-target">
+                        Study from source to target language.
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
-<div id="cardDetails">
-    <h2>Flash Cards</h2>
-    <ul>
-    {%- for card in deck.cards %}
-        <li>
-            <div>
-                <h3>{{ card.target_word }}</h3>
-                <p>
-                    <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
-                    <b>Translation:</b> {{ card.translation }}<br>
-                    {%- if card.sentence is not none %}
-                    <b>Example:</b> {{ card.sentence }}<br>
-                    {% endif -%}
-                </p>
-            </div>
-        </li>
-    {% endfor -%}
-    </ul>
+<div class="container-md" id="cardDetails">
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">Flash Cards</h2>
+        <ul class="list-group">
+        {%- for card in deck.cards %}
+            <li class="list-group-item">
+                <div>
+                    <h3 class="card-subtitle">{{ card.target_word }}</h3>
+                    <p>
+                        <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
+                        <b>Translation:</b> {{ card.translation }}<br>
+                        {%- if card.sentence is not none %}
+                        <b>Example:</b> {{ card.sentence }}<br>
+                        {% endif -%}
+                    </p>
+                </div>
+            </li>
+        {% endfor -%}
+        </ul>
+    </div>
+</div>
 </div>
 {% endif -%}
-<div id="editLinks">
-    <h2>Edit Deck</h2>
-    <ul>
-        <li>
-            <a href="/decks/{{ deck.id }}/edit">Edit Deck Details</a>
-        </li>
-        <li>
-            <a href="/decks/{{ deck.id }}/add-cards">Add Cards to Deck</a>
-        </li>
-        <li>
-            <a href="/decks/{{ deck.id }}/remove-cards">Remove Cards from Deck</a>
-        </li>
-    </ul>
+<div class="container-md" id="editLinks">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Edit Deck</h2>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="/decks/{{ deck.id }}/edit">Edit Deck Details</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/decks/{{ deck.id }}/add-cards">Add Cards to Deck</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/decks/{{ deck.id }}/remove-cards">Remove Cards from Deck</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 {% endblock %}
