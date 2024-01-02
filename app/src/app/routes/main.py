@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from .cards import card_router
+from .decks import deck_router
 from .languages import lang_router
 from ..template_util import TEMPLATE_ENV
 
@@ -36,3 +37,4 @@ async def health() -> JSONResponse:
 # Includes
 base_router.include_router(lang_router, prefix="/languages")
 base_router.include_router(card_router, prefix="/cards")
+base_router.include_router(deck_router, prefix="/decks")
