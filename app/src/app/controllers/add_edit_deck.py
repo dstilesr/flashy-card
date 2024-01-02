@@ -8,7 +8,6 @@ from fastapi.responses import RedirectResponse
 
 from .base import BaseController
 from ..crud_utils.decks import DecksCRUD
-from ..crud_utils.languages import LanguageCRUD
 
 
 class EditCardDeck(BaseController):
@@ -37,7 +36,6 @@ class EditCardDeck(BaseController):
         self.context = context
         self.language_id = language_id
         self.deck_id = deck_id
-        self.lang_crud = LanguageCRUD(self.engine)
         self.deck_crud = DecksCRUD(self.engine)
 
     async def edit_deck(self):
@@ -58,18 +56,20 @@ class EditCardDeck(BaseController):
             await session.commit()
             self.logger.warning("Updated: %d" % result.rowcount)
 
-    async def create_deck(self):
+    async def create_deck(self) -> m.CardDeck:
         """
         Make new deck.
         :return:
         """
-        _ = await self.deck_crud.create(
+        deck = await self.deck_crud.create(
             {
                 "name": self.name,
                 "context": self.context,
                 "language_id": self.language_id
-            }
+            },
+            refresh=True
         )
+        return deck
 
     async def process_request(self, **kwargs) -> RedirectResponse:
         """
@@ -78,11 +78,12 @@ class EditCardDeck(BaseController):
         """
         if self.deck_id is not None:
             await self.edit_deck()
+            deck_id = self.deck_id
         else:
-            await self.create_deck()
+            deck = await self.create_deck()
+            deck_id = deck.id
 
-        language = await self.lang_crud.get_one(language_id=self.language_id)
         return RedirectResponse(
-            f"/decks/{language.slug}/list",
+            f"/decks/{deck_id}/detail",
             status_code=302
         )
