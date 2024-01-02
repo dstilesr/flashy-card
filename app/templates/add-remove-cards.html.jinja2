@@ -1,0 +1,28 @@
+{% extends "base.html.jinja2" %}
+{% block page_body %}
+<div>
+    <h1>{% if remove %}Remove Cards from {% else %}Add Cards to {% endif %}Deck</h1>
+    <h2>Deck: {{ deck_name }}</h2>
+</div>
+<div>
+<ul>
+    {%- for card in cards %}
+    <li>
+        <div>
+            <h3>{{ card.target_word }}</h3>
+            <p>
+                <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
+                <b>Translation:</b> {{ card.translation }}<br>
+                <a href="/decks/{{ deck_id }}/{% if remove %}remove-card{% else %}add-card{% endif %}?card_id={{ card.id }}">
+                {%- if remove %}Remove Card{% else %}Add Card{% endif -%}
+                </a>
+            </p>
+        </div>
+    </li>
+    {% endfor -%}
+</ul>
+</div>
+<div>
+    <a href="/decks/{{ language_slug }}/list"><h3>Done</h3></a>
+</div>
+{% endblock %}
