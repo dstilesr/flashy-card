@@ -1,4 +1,5 @@
 import sqlalchemy as sa
+from datetime import datetime
 from typing import Dict, Any, Sequence, Optional
 
 from .base import BaseCrud
@@ -82,5 +83,23 @@ class LanguageCRUD(BaseCrud):
         :return:
         """
         async with self.get_session() as session:
-            results = await session.scalars(sa.select(Language))
+            results = await session.scalars(
+                sa.select(Language).where(Language.deleted_at.is_(None))
+            )
         return results
+
+    async def delete(
+            self,
+            slug: str):
+        """
+        Soft-delete a language from the DB.
+        :return:
+        """
+        stmt = sa.update(Language)\
+            .where((Language.slug == slug) & (Language.deleted_at.is_(None)))\
+            .values(deleted_at=datetime.utcnow(), slug=f"{slug}-deleted-lang")
+
+        async with self.get_session() as session:
+            res = await session.execute(stmt)
+            if res.rowcount == 0:
+                raise err.ResourceNotFound("Found no 'Language' to delete!")

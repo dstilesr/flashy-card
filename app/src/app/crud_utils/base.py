@@ -56,3 +56,11 @@ class BaseCrud(ABC):
         :return:
         """
         pass
+
+    @abstractmethod
+    async def delete(self, **filters):
+        """
+        Delete from the DB.
+        :return:
+        """
+        pass

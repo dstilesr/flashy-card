@@ -1,8 +1,9 @@
 import sqlalchemy as sa
+from datetime import datetime
 from typing import Dict, Any, Sequence
 
 from .base import BaseCrud
-from ..models import FlashCard
+from ..models import FlashCard, card_deck_assoc
 
 
 class CardsCRUD(BaseCrud):
@@ -61,3 +62,24 @@ class CardsCRUD(BaseCrud):
         async with self.get_session() as session:
             cards = await session.scalars(stmt)
             return cards
+
+    async def delete(self, card_id: int):
+        """
+        Delete the given card.
+        :param card_id:
+        :return:
+        """
+        async with self.get_session() as session:
+            # Delete association to existing decks
+            res = await session.execute(
+                sa.delete(card_deck_assoc)
+                .where(card_deck_assoc.c.card_id == card_id)
+            )
+            self.logger.info("Deleted from %d decks" % res.rowcount)
+
+            # Delete card
+            await session.execute(
+                sa.update(FlashCard)
+                .where(FlashCard.id == card_id)
+                .values(deleted_at=datetime.utcnow())
+            )

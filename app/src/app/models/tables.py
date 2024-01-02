@@ -26,6 +26,10 @@ class Language(Base):
     )
 
     decks: Mapped[List["CardDeck"]] = relationship(back_populates="language")
+    cards: Mapped[List["FlashCard"]] =\
+        relationship(back_populates="target_language")
+
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
 
     __table_args__ = (
         sa.Index("language_slug_idx", "slug", unique=True),
