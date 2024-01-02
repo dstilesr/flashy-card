@@ -50,7 +50,7 @@ class BaseCrud(ABC):
         pass
 
     @abstractmethod
-    async def get_one(self) -> ModelBase:
+    async def get_one(self, **filters) -> ModelBase:
         """
         Get a single item from the DB.
         :return:
