@@ -1,0 +1,64 @@
+{% extends "base.html.jinja2" %}
+{% macro study_mode() %}
+    {%- if to_target %}to-target{% else %}from-target{% endif -%}
+{% endmacro %}
+{% macro study_mode_display() %}
+    {%- if to_target %}To Target Language{% else %}From Target Language{% endif -%}
+{% endmacro %}
+
+{% block page_body %}
+<div id="titleSection">
+    <h1>Flash Cards Study</h1>
+    <h2>Mode: {{ study_mode_display() }}</h2>
+    <h2>{{ deck.name }} - Card {{ idx }} of {{ total_cards }}</h2>
+</div>
+<div id="cardDetail">
+    <h2>Card</h2>
+    <h3>
+        {%- if to_target %}{{ card.translation }}{% else %}{{ card.target_word }}{% endif -%}
+    </h3>
+    <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
+    <section id="actionsSection">
+        <h3>Actions</h3>
+        {%- if (example or show_all) and (not to_target) %}
+        <b>Example Sentence:</b> {{ card.sentence }}<br>
+        {%- else %}
+        <a href="/study/{{ deck.id }}/{{ study_mode() }}?idx={{ idx }}&seed={{ rnd_seed }}&show_example=true">
+            <b>Show Example Sentence</b><br>
+        </a>
+        {% endif -%}
+        {%- if show_all %}
+            <b>Answer:</b> {% if to_target %}{{ card.target_word }}{% else %}{{ card.translation }}{% endif %}<br>
+        {%- else %}
+            <a href="/study/{{ deck.id }}/{{ study_mode() }}?idx={{ idx }}&seed={{ rnd_seed }}&show_answer=true">
+                Show Answer
+            </a>
+        {% endif -%}
+    </section>
+</div>
+<div id="linksSection">
+    <nav id="pageLinks">
+        <ul>
+            {%- if idx > 1 %}
+            <li>
+                <a href="/study/{{ deck.id }}/{{ study_mode() }}?idx={{ idx - 1 }}&seed={{ rnd_seed }}">
+                    Previous
+                </a>
+            </li>
+            {% endif -%}
+            {%- if idx < total_cards %}
+            <li>
+                <a href="/study/{{ deck.id }}/{{ study_mode() }}?idx={{ idx + 1 }}&seed={{ rnd_seed }}">
+                    Next
+                </a>
+            </li>
+            {% endif -%}
+            <li>
+                <a href="/decks/{{ deck.id }}/detail">
+                    Back to Deck Details
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endblock %}
