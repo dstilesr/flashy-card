@@ -4,38 +4,36 @@
 {%- endmacro %}
 
 {% block page_body %}
-<div>
+<div class="container-md">
     <h1>{% if remove %}Remove Cards from {% else %}Add Cards to {% endif %}Deck</h1>
     <h2>Deck: {{ deck_name }}</h2>
 </div>
-<div>
-<ul>
-    {%- for card in cards %}
-    <li>
-        <div id="cardContainer{{ card.id }}">
-            <h3>{{ card.target_word }}</h3>
+<div class="container-md">
+{%- for card in cards %}
+    <div class="card" id="cardContainer{{ card.id }}">
+        <div class="card-body">
+            <h3 class="card-title">{{ card.target_word }}</h3>
             <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
             <b>Translation:</b> {{ card.translation }}<br>
-            <form
-                    id="cardForm{{ card.id }}"
-                    method="post"
-                    action="/decks/{{ deck_id }}/{{ verb() }}-card">
-                <div>
-                    <input type="hidden" id="cardIdInput{{ card.id }}" name="card_id" value="{{ card.id }}">
-                    <input
-                            id="{{ verb() }}-card-{{ card.id }}"
-                            name="{{ verb() }}-card-{{ card.id }}"
-                            type="submit"
-                            value="{{ verb()|capitalize }} Card"
-                            form="cardForm{{ card.id }}">
-                </div>
-            </form>
         </div>
-    </li>
-    {% endfor -%}
-</ul>
+        <form
+                id="cardForm{{ card.id }}"
+                method="post"
+                action="/decks/{{ deck_id }}/{{ verb() }}-card">
+            <div class="card-body">
+                <input type="hidden" id="cardIdInput{{ card.id }}" name="card_id" value="{{ card.id }}">
+                <input  class="btn btn-primary"
+                        id="{{ verb() }}-card-{{ card.id }}"
+                        name="{{ verb() }}-card-{{ card.id }}"
+                        type="submit"
+                        value="{{ verb()|capitalize }} Card"
+                        form="cardForm{{ card.id }}">
+            </div>
+        </form>
+    </div>
+{% endfor -%}
 </div>
-<div>
-    <a href="/decks/{{ deck_id }}/detail"><h3>Done</h3></a>
+<div class="container-md">
+    <a class="btn btn-outline-primary" href="/decks/{{ deck_id }}/detail">Done</a>
 </div>
 {% endblock %}
