@@ -80,6 +80,7 @@ class AddRemoveCardsDeckPage(BaseController):
         content = self.template_env\
             .get_template("add-remove-cards.html.jinja2")\
             .render(
+                deck_id=deck.id,
                 deck_name=deck.name,
                 remove=self.remove,
                 cards=display_cards

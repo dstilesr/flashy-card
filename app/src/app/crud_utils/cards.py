@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Dict, Any, Sequence
 
 from .base import BaseCrud
+from .. import exceptions as err
 from ..models import FlashCard, card_deck_assoc
 
 
@@ -22,6 +23,8 @@ class CardsCRUD(BaseCrud):
                 sa.select(FlashCard).where(FlashCard.id == card_id)
             )
             card = res.one_or_none()
+            if card is None:
+                raise err.ResourceNotFound("Card not found!")
         return card
 
     async def create(

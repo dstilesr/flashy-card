@@ -6,6 +6,7 @@ from ..db import DB_ENGINE
 from ..controllers.list_decks import ListDecksLang
 from ..controllers.add_edit_deck import EditCardDeck
 from ..controllers.add_edit_deck_page import AddEditDeckPage
+from ..controllers.add_remove_from_deck import AddRemoveFromDeck
 from ..controllers.manage_card_deck_page import AddRemoveCardsDeckPage
 
 deck_router = APIRouter()
@@ -106,6 +107,21 @@ async def add_cards_page(deck_id: int) -> HTMLResponse:
     return rsp
 
 
+@deck_router.post("/{deck_id}/add-card")
+async def add_card(
+        deck_id: int,
+        card_id: Annotated[int, Form()]) -> RedirectResponse:
+    """
+    Add a card to the deck.
+    :param deck_id:
+    :param card_id:
+    :return:
+    """
+    handler = AddRemoveFromDeck(DB_ENGINE, deck_id, card_id, False)
+    rsp = await handler.process_request()
+    return rsp
+
+
 @deck_router.get("/{deck_id}/remove-cards")
 async def remove_cards_page(deck_id: int) -> HTMLResponse:
     """
@@ -114,5 +130,20 @@ async def remove_cards_page(deck_id: int) -> HTMLResponse:
     :return:
     """
     handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id, True)
+    rsp = await handler.process_request()
+    return rsp
+
+
+@deck_router.post("/{deck_id}/remove-card")
+async def remove_card(
+        deck_id: int,
+        card_id: Annotated[int, Form()]) -> RedirectResponse:
+    """
+    Remove a card from the deck.
+    :param deck_id:
+    :param card_id:
+    :return:
+    """
+    handler = AddRemoveFromDeck(DB_ENGINE, deck_id, card_id, True)
     rsp = await handler.process_request()
     return rsp
