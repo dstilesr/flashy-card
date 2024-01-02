@@ -14,7 +14,7 @@
                 <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
                 <b>Translation:</b> {{ card.translation }}<br>
                 <a href="/decks/{{ deck_id }}/{% if remove %}remove-card{% else %}add-card{% endif %}?card_id={{ card.id }}">
-                {%- if remove %}Remove Card{% else %}Add Card{% endif -%}
+                    {%- if remove %}<b>Remove Card</b>{% else %}<b>Add Card</b>{% endif -%}
                 </a>
             </p>
         </div>

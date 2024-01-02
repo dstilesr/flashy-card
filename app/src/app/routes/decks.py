@@ -6,6 +6,7 @@ from ..db import DB_ENGINE
 from ..controllers.list_decks import ListDecksLang
 from ..controllers.add_edit_deck import EditCardDeck
 from ..controllers.add_edit_deck_page import AddEditDeckPage
+from ..controllers.manage_card_deck_page import AddRemoveCardsDeckPage
 
 deck_router = APIRouter()
 
@@ -89,5 +90,29 @@ async def edit_card_deck(
         language_id,
         deck_id
     )
+    rsp = await handler.process_request()
+    return rsp
+
+
+@deck_router.get("/{deck_id}/add-cards")
+async def add_cards_page(deck_id: int) -> HTMLResponse:
+    """
+    Add cards page for a given deck.
+    :param deck_id:
+    :return:
+    """
+    handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id)
+    rsp = await handler.process_request()
+    return rsp
+
+
+@deck_router.get("/{deck_id}/remove-cards")
+async def remove_cards_page(deck_id: int) -> HTMLResponse:
+    """
+    Remove cards page for a given deck.
+    :param deck_id:
+    :return:
+    """
+    handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id, True)
     rsp = await handler.process_request()
     return rsp
