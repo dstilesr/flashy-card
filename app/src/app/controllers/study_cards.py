@@ -81,7 +81,10 @@ class StudyCardPage(BaseController):
                     card=self.select_card(list(deck.cards)),
                     rnd_seed=self.rnd_seed,
                     to_target=self.to_target,
-                    idx=self.idx
+                    idx=self.idx,
+                    total_cards=len(deck.cards),
+                    show_all=self.answer,
+                    example=self.example
                 )
 
         return HTMLResponse(page)
