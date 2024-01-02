@@ -6,10 +6,10 @@
 <div id="basicDetails">
     <h2>Deck Details:</h2>
     <p>
-        <b>Language:</b>{{ deck.language.name }}<br>
-        <b>Context:</b>{{ deck.context }}<br>
-        <b>Created:</b>{{ "{dt:%Y-%m-%d}".format(dt=deck.created_at) }}<br>
-        <b>Updated:</b>{{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
+        <b>Language:</b> {{ deck.language.name }}<br>
+        <b>Context:</b> {{ deck.context }}<br>
+        <b>Created:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.created_at) }}<br>
+        <b>Updated:</b> {{ "{dt:%Y-%m-%d}".format(dt=deck.updated_at) }}<br>
     </p>
 </div>
 <div id="cardDetails">
@@ -20,8 +20,8 @@
             <div>
                 <h3>{{ card.target_word }}</h3>
                 <p>
-                    <b>Part of Speech:</b>{{ card.part_of_speech }}<br>
-                    <b>Translation:</b>{{ card.translation }}<br>
+                    <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
+                    <b>Translation:</b> {{ card.translation }}<br>
                     {%- if card.sentence is not none %}
                     <b>Example:</b> {{ card.sentence }}<br>
                     {% endif -%}

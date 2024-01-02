@@ -3,6 +3,7 @@ from typing import Annotated, Optional
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from ..db import DB_ENGINE
+from ..controllers.deck_detail import DeckDetail
 from ..controllers.list_decks import ListDecksLang
 from ..controllers.add_edit_deck import EditCardDeck
 from ..controllers.add_edit_deck_page import AddEditDeckPage
@@ -145,5 +146,17 @@ async def remove_card(
     :return:
     """
     handler = AddRemoveFromDeck(DB_ENGINE, deck_id, card_id, True)
+    rsp = await handler.process_request()
+    return rsp
+
+
+@deck_router.get("/{deck_id}/detail")
+async def deck_detail(deck_id: int) -> HTMLResponse:
+    """
+    Render deck details page.
+    :param deck_id:
+    :return:
+    """
+    handler = DeckDetail(DB_ENGINE, deck_id)
     rsp = await handler.process_request()
     return rsp
