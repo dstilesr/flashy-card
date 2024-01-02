@@ -37,13 +37,8 @@ class AddRemoveCardsDeckPage(BaseController):
         Get the flash cards present in the deck.
         :return:
         """
-        qry = sa.select(m.CardDeck)\
-            .where(
-                m.CardDeck.deleted_at.is_(None)
-                & (m.CardDeck.id == self.deck_id)
-            )\
-            .options(orm.subqueryload(m.CardDeck.cards))
         async with sa_async.AsyncSession(self.engine) as session:
+            qry = DecksCRUD.deck_with_cards_stmt(self.deck_id)
             res = await session.scalars(qry)
             deck = res.one_or_none()
             if deck is None:

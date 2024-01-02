@@ -1,4 +1,5 @@
 import sqlalchemy as sa
+from sqlalchemy import orm
 from datetime import datetime
 from typing import Dict, Any, Sequence, Optional
 
@@ -11,6 +12,21 @@ class DecksCRUD(BaseCrud):
     """
     Handler for Card Deck model crud.
     """
+
+    @staticmethod
+    def deck_with_cards_stmt(deck_id: int) -> sa.Select:
+        """
+        Make a statement to select a single deck along with its flash cards.
+        :param deck_id:
+        :return:
+        """
+        stmt = sa.select(m.CardDeck) \
+            .where(
+                m.CardDeck.deleted_at.is_(None)
+                & (m.CardDeck.id == deck_id)
+            ) \
+            .options(orm.subqueryload(m.CardDeck.cards))
+        return stmt
 
     async def get_one(self, deck_id: int) -> m.CardDeck:
         """

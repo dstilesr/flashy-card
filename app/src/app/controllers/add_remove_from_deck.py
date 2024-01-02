@@ -1,14 +1,14 @@
 import jinja2
 import sqlalchemy as sa
-from sqlalchemy import orm
 from typing import Optional
+from datetime import datetime
 import sqlalchemy.ext.asyncio as sa_async
 from fastapi.responses import RedirectResponse
 
 from .. import models as m
 from .. import exceptions as err
 from .base import BaseController
-from ..crud_utils.cards import CardsCRUD
+from ..crud_utils.decks import DecksCRUD
 
 
 class AddRemoveFromDeck(BaseController):
@@ -34,7 +34,7 @@ class AddRemoveFromDeck(BaseController):
         self.card_id = card_id
         self.deck_id = deck_id
         self.remove = remove
-        self.card_crud = CardsCRUD(self.engine)
+        self.deck_crud = DecksCRUD(self.engine)
 
     async def get_card(self, session: sa_async.AsyncSession) -> m.FlashCard:
         """
@@ -59,14 +59,8 @@ class AddRemoveFromDeck(BaseController):
         Add or remove the card from the deck.
         :return: Redirect back to the add / remove page.
         """
-        stmt = sa.select(m.CardDeck) \
-            .where(
-                m.CardDeck.deleted_at.is_(None)
-                & (m.CardDeck.id == self.deck_id)
-            ) \
-            .options(orm.subqueryload(m.CardDeck.cards))
-
         async with sa_async.AsyncSession(self.engine) as session:
+            stmt = self.deck_crud.deck_with_cards_stmt(self.deck_id)
             res = await session.scalars(stmt)
             card = await self.get_card(session)
             deck = res.one_or_none()
@@ -78,7 +72,7 @@ class AddRemoveFromDeck(BaseController):
                 deck.cards.remove(card)
             else:
                 deck.cards.append(card)
-
+            deck.updated_at = datetime.utcnow()
             session.add(deck)
             await session.commit()
 
