@@ -14,8 +14,10 @@
 <h1>{{ list_title }}</h1>
 {%- for card in cards %}
     <div class="card">
-        <div class="card-body">
+        <div class="card-header">
             <h2 class="card-title">{{ card.word }}</h2>
+        </div>
+        <div class="card-body">
             <b>{{ card.word }} ({{ card.part_of_speech }}):</b> {{ card.translation }}<br>
             {% if card.sentence is not none -%}
             <b>Example:</b> {{ card.sentence }}<br>

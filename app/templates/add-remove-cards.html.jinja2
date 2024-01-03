@@ -11,16 +11,18 @@
 <div class="container-md">
 {%- for card in cards %}
     <div class="card" id="cardContainer{{ card.id }}">
-        <div class="card-body">
+        <div class="card-header">
             <h3 class="card-title">{{ card.target_word }}</h3>
+        </div>
+        <div class="card-body">
             <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
             <b>Translation:</b> {{ card.translation }}<br>
         </div>
-        <form
+        <div class="card-body">
+            <form
                 id="cardForm{{ card.id }}"
                 method="post"
                 action="/decks/{{ deck_id }}/{{ verb() }}-card">
-            <div class="card-body">
                 <input type="hidden" id="cardIdInput{{ card.id }}" name="card_id" value="{{ card.id }}">
                 <input  class="btn btn-primary"
                         id="{{ verb() }}-card-{{ card.id }}"
@@ -28,8 +30,8 @@
                         type="submit"
                         value="{{ verb()|capitalize }} Card"
                         form="cardForm{{ card.id }}">
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 {% endfor -%}
 </div>
