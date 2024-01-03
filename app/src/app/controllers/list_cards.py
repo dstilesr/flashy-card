@@ -74,6 +74,6 @@ class ListCardsLang(BaseController):
         rsp_body = template.render(
             list_title="List of Cards for %s Language" % language.name,
             cards=items,
-            language_id=language.id
+            language=language
         )
         return HTMLResponse(rsp_body)

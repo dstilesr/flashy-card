@@ -72,6 +72,6 @@ class ListDecksLang(BaseController):
         language = await self.get_language()
         rsp_body = self.template_env.get_template("list-card-decks.html.jinja2").render(
             decks=decks,
-            language_id=language.id
+            language=language,
         )
         return HTMLResponse(rsp_body)

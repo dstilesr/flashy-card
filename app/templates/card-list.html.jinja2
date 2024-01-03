@@ -1,4 +1,14 @@
 {% extends "base.html.jinja2" %}
+{% if language is defined -%}
+    {% block navbar_links %}
+        {{- super() }}
+        <li class="nav-item">
+            <a class="nav-link" href="/decks/{{ language.slug }}/list">
+                {{ language.name }} Card Decks
+            </a>
+        </li>
+    {% endblock navbar_links %}
+{%- endif %}
 {% block page_body %}
 <div class="container-md">
 <h1>{{ list_title }}</h1>
@@ -16,7 +26,7 @@
 {%- endfor %}
 </div>
 <div class="container-md">
-    <a class="btn btn-outline-primary" href="/cards/add{% if language_id is defined %}?language_id={{ language_id }}{% endif %}">
+    <a class="btn btn-outline-primary" href="/cards/add{% if language is defined %}?language_id={{ language.id }}{% endif %}">
         Add New Card
     </a>
 </div>
