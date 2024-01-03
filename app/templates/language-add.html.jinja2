@@ -1,17 +1,25 @@
 {% extends "base.html.jinja2" %}
 {% block page_body %}
-<div>
-<h1>Add New Language to List</h1>
-<form id="addLanguage" action="/languages/add" method="post">
-    <div>
-        <label for="lang_name">Language Name:</label>
-        <input type="text" id="lang_name" name="lang_name">
+<div class="container-md">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Add New Language</h1>
+        </div>
     </div>
-    <div>
-        <label for="lang_notes">Personal Notes on the Language:</label>
-        <textarea id="lang_notes" name="lang_notes" rows="4"></textarea>
+    <div class="card">
+        <form id="addLanguage" action="/languages/add" method="post">
+            <div class="card-body">
+                <label class="form-label" for="lang_name">Language Name:</label>
+                <input class="form-control" type="text" id="lang_name" name="lang_name">
+            </div>
+            <div class="card-body">
+                <label class="form-label" for="lang_notes">Personal Notes on the Language:</label>
+                <textarea class="form-control" id="lang_notes" name="lang_notes" rows="4"></textarea>
+            </div>
+            <div class="card-body">
+                <input class="btn btn-primary" type="submit" form="addLanguage" value="Add Language">
+            </div>
+        </form>
     </div>
-    <input type="submit" form="addLanguage" value="Add Language">
-</form>
 </div>
 {% endblock %}
