@@ -75,9 +75,10 @@ class BaseController(ABC):
         :param page: Page to fetch.
         :return: List of items, total pages.
         """
-        if len(items) == 0:
+        total = len(items)
+        if total == 0:
             return items, 1
 
-        total_pages = (len(items) // PAGE_SIZE) + 1
-        start = min(((page - 1) * PAGE_SIZE, len(items) - 1))
+        total_pages = (total // PAGE_SIZE) + min(1, total % PAGE_SIZE)
+        start = min(((page - 1) * PAGE_SIZE, total - 1))
         return items[start:start + PAGE_SIZE], total_pages
