@@ -76,10 +76,14 @@ class LanguageCRUD(BaseCrud):
 
     async def list_items(
             self,
+            page: Optional[int] = None,
+            page_size: Optional[int] = None,
             **filters) -> Sequence[Language]:
         """
         List available languages.
         :param filters: Not used.
+        :param page:
+        :param page_size:
         :return:
         """
         async with self.get_session() as session:

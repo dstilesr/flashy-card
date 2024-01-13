@@ -49,10 +49,14 @@ class DecksCRUD(BaseCrud):
 
     async def list_items(
             self,
+            page: Optional[int] = None,
+            page_size: Optional[int] = None,
             language_id: Optional[int] = None,
             language_slug: Optional[str] = None) -> Sequence[m.CardDeck]:
         """
         List card decks.
+        :param page:
+        :param page_size:
         :param language_id:
         :param language_slug:
         :return:

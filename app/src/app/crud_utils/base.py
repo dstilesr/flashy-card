@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Sequence
 import sqlalchemy.ext.asyncio as sa_async
+from typing import Dict, Any, Sequence, Optional
 
 from ..models import Base as ModelBase
 
@@ -10,6 +10,7 @@ class BaseCrud(ABC):
     """
     Base CRUD utils class.
     """
+    PAGE_SIZE: int = 25
 
     def __init__(self, engine: sa_async.AsyncEngine):
         self.logger = logging.getLogger(type(self).__name__)
@@ -42,7 +43,10 @@ class BaseCrud(ABC):
         pass
 
     @abstractmethod
-    async def list_items(self) -> Sequence[ModelBase]:
+    async def list_items(
+            self,
+            page: Optional[int] = None,
+            page_size: Optional[int] = None) -> Sequence[ModelBase]:
         """
         List records.
         :return:

@@ -1,6 +1,6 @@
 import sqlalchemy as sa
 from datetime import datetime
-from typing import Dict, Any, Sequence
+from typing import Dict, Any, Sequence, Optional
 
 from .base import BaseCrud
 from .. import exceptions as err
@@ -47,9 +47,13 @@ class CardsCRUD(BaseCrud):
 
     async def list_items(
             self,
+            page: Optional[int] = None,
+            page_size: Optional[int] = None,
             **filters) -> Sequence[FlashCard]:
         """
         List available cards.
+        :param page:
+        :param page_size:
         :param filters: Values to filter the cards.
         :return:
         """
