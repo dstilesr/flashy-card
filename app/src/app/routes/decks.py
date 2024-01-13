@@ -97,13 +97,14 @@ async def edit_card_deck(
 
 
 @deck_router.get("/{deck_id}/add-cards")
-async def add_cards_page(deck_id: int) -> HTMLResponse:
+async def add_cards_page(deck_id: int, page: int = 1) -> HTMLResponse:
     """
     Add cards page for a given deck.
     :param deck_id:
+    :param page:
     :return:
     """
-    handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id)
+    handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id, page=page)
     rsp = await handler.process_request()
     return rsp
 
@@ -124,13 +125,14 @@ async def add_card(
 
 
 @deck_router.get("/{deck_id}/remove-cards")
-async def remove_cards_page(deck_id: int) -> HTMLResponse:
+async def remove_cards_page(deck_id: int, page: int = 1) -> HTMLResponse:
     """
     Remove cards page for a given deck.
     :param deck_id:
+    :param page:
     :return:
     """
-    handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id, True)
+    handler = AddRemoveCardsDeckPage(DB_ENGINE, deck_id, True, page)
     rsp = await handler.process_request()
     return rsp
 

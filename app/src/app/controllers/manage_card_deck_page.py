@@ -21,16 +21,19 @@ class AddRemoveCardsDeckPage(BaseController):
             engine: sa_async.AsyncEngine,
             deck_id: int,
             remove: bool = False,
+            page: int = 1,
             template_env: Optional[jinja2.Environment] = None):
         """
         :param engine:
         :param deck_id:
         :param remove:
+        :param page:
         :param template_env:
         """
         super().__init__(engine, template_env)
         self.deck_id = deck_id
         self.remove = remove
+        self.page = page
 
     async def get_cards_in_deck(self) -> List[m.FlashCard]:
         """
@@ -59,11 +62,12 @@ class AddRemoveCardsDeckPage(BaseController):
         deck = await deck_crud.get_one(self.deck_id)
         deck_cards = await self.get_cards_in_deck()
         if self.remove:
-            display_cards = deck_cards
+            display_cards, total = self.paginate_list(deck_cards, self.page)
+            link = f"/decks/{self.deck_id}/remove-cards"
         else:
             exclude = {c.id for c in deck_cards}
             async with sa_async.AsyncSession(self.engine) as sess:
-                display_cards = await sess.scalars(
+                all_cards = await sess.scalars(
                     sa.select(m.FlashCard)
                     .where(
                         m.FlashCard.deleted_at.is_(None)
@@ -71,6 +75,11 @@ class AddRemoveCardsDeckPage(BaseController):
                         & (m.FlashCard.target_language_id == deck.language_id)
                     )
                 )
+                display_cards, total = self.paginate_list(
+                    list(all_cards),
+                    self.page
+                )
+                link = f"/decks/{self.deck_id}/add-cards"
 
         content = self.template_env\
             .get_template("add-remove-cards.html.jinja2")\
@@ -78,7 +87,10 @@ class AddRemoveCardsDeckPage(BaseController):
                 deck_id=deck.id,
                 deck_name=deck.name,
                 remove=self.remove,
-                cards=display_cards
+                cards=display_cards,
+                link=link,
+                page=self.page,
+                total_pages=total
             )
 
         return HTMLResponse(content)
