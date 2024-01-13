@@ -20,17 +20,20 @@ class ListCardsLang(BaseController):
             engine: sa_async.AsyncEngine,
             language_slug: str,
             part_of_speech: Optional[PartOfSpeech] = None,
+            page: int = 1,
             template_env: Optional[jinja2.Environment] = None):
         """
         :param engine:
         :param template_env:
         :param part_of_speech:
         :param language_slug:
+        :param page:
         """
         super().__init__(engine, template_env)
         self.language_slug = language_slug
         self.pos = part_of_speech
         self.__crud = CardsCRUD(self.engine)
+        self.page = page
 
     async def get_language(self) -> m.Language:
         """
@@ -60,6 +63,7 @@ class ListCardsLang(BaseController):
         if self.pos is not None:
             filters.update(part_of_speech=self.pos)
         cards = await self.__crud.list_items(**filters)
+        cards, total_pages = self.paginate_list(list(cards), self.page)
         for card in cards:
             items.append({
                 "id": card.id,
@@ -74,6 +78,9 @@ class ListCardsLang(BaseController):
         rsp_body = template.render(
             list_title="List of Cards for %s Language" % language.name,
             cards=items,
-            language=language
+            language=language,
+            page=self.page,
+            link=f"/cards/{language.slug}/list",
+            total_pages=total_pages
         )
         return HTMLResponse(rsp_body)

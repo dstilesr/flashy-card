@@ -10,7 +10,6 @@ class BaseCrud(ABC):
     """
     Base CRUD utils class.
     """
-    PAGE_SIZE: int = 25
 
     def __init__(self, engine: sa_async.AsyncEngine):
         self.logger = logging.getLogger(type(self).__name__)

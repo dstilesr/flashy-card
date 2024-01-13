@@ -12,13 +12,20 @@ card_router = APIRouter()
 
 
 @card_router.get("/{language_slug}/list")
-async def list_cards_language(language_slug: str) -> HTMLResponse:
+async def list_cards_language(
+        language_slug: str,
+        page: int = 1) -> HTMLResponse:
     """
     List the cards for the given language.
     :param language_slug:
+    :param page:
     :return:
     """
-    controller = ListCardsLang(DB_ENGINE, language_slug=language_slug)
+    controller = ListCardsLang(
+        DB_ENGINE,
+        language_slug=language_slug,
+        page=page
+    )
     rsp = await controller.process_request()
     return rsp
 

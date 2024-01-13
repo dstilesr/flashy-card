@@ -1,13 +1,16 @@
 import jinja2
 import logging
-from typing import Optional
 from abc import ABC, abstractmethod
 from fastapi.responses import Response
 from ..template_util import TEMPLATE_ENV
 from sqlalchemy.ext.asyncio import AsyncEngine
+from typing import Optional, Tuple, List, TypeVar
 
 from .. import models as m
 from .. import exceptions as err
+from ..constants import PAGE_SIZE
+
+T = TypeVar("T", bound=m.Base)
 
 
 class BaseController(ABC):
@@ -61,3 +64,20 @@ class BaseController(ABC):
         """
         if obj is None:
             raise err.ResourceNotFound("%s not found!" % obj_type)
+
+    @staticmethod
+    def paginate_list(
+            items: List[T],
+            page: int) -> Tuple[List[T], int]:
+        """
+        Get the given "page" from a large list of items.
+        :param items: List of items.
+        :param page: Page to fetch.
+        :return: List of items, total pages.
+        """
+        if len(items) == 0:
+            return items, 1
+
+        total_pages = (len(items) // PAGE_SIZE) + 1
+        start = min(((page - 1) * PAGE_SIZE, len(items) - 1))
+        return items[start:start + PAGE_SIZE], total_pages
