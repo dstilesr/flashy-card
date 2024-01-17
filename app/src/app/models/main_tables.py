@@ -75,6 +75,7 @@ class FlashCard(Base):
     deleted_at: Mapped[Optional[datetime]]
 
     target_language: Mapped["Language"] = relationship()
+    studies: Mapped[List["CardStudy"]] = relationship(back_populates="card")
 
 
 class CardDeck(Base):
@@ -102,3 +103,4 @@ class CardDeck(Base):
     cards: Mapped[List[FlashCard]] = relationship(
         secondary=card_deck_assoc
     )
+    study_runs: Mapped[List["StudyRun"]] = relationship(back_populates="deck")
