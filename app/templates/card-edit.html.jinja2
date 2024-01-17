@@ -35,9 +35,9 @@
             <div class="card-body">
                 <label for="sentence" class="form-label">Example Sentence</label>
                 <textarea class="form-control" id="sentence" name="sentence" rows="3">
-                    {%- if card is defined and card.sentence is not none %}
+                    {%- if card is defined and card.sentence is not none -%}
                     {{ card.sentence }}
-                    {% endif -%}
+                    {%- endif -%}
                 </textarea>
             </div>
             <div class="card-body">
@@ -52,12 +52,12 @@
                 <input type="hidden" name="language_id" value="{{ language_id }}">
                 {% endif -%}
             </div>
-            <div>
+            <div class="card-body">
                 <label class="form-label" for="grammar_info">Additional Grammatical Detail</label>
                 <textarea class="form-control" id="grammar_info" name="grammar_info" rows="3">
-                    {%- if card is defined and card.grammar_info is not none %}
+                    {%- if card is defined and card.grammar_info is not none -%}
                     {{ card.grammar_info }}
-                    {% endif -%}
+                    {%- endif -%}
                 </textarea>
             </div>
             {% if card is defined -%}
