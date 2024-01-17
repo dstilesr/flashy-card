@@ -23,7 +23,10 @@
                 {%- if to_target %}{{ card.translation }}{% else %}{{ card.target_word }}{% endif -%}
             </h2>
             <h4 class="card-subtitle">Card {{ idx }} of {{ total_cards }}</h4>
-            <b>Part of Speech:</b> {{ card.part_of_speech }}
+            <b>Part of Speech:</b> {{ card.part_of_speech }}<br>
+            {% if card.grammar_info is not none -%}
+            <b>Grammatical Detail:</b> {{ card.grammar_info }}<br>
+            {%- endif %}
         </div>
     </div>
     <div class="card">

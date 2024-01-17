@@ -53,7 +53,6 @@ class ListCardsLang(BaseController):
         List flash cards for a given language.
         :return:
         """
-        items = []
         language = await self.get_language()
 
         filters = {
@@ -64,20 +63,11 @@ class ListCardsLang(BaseController):
             filters.update(part_of_speech=self.pos)
         cards = await self.__crud.list_items(**filters)
         cards, total_pages = self.paginate_list(list(cards), self.page)
-        for card in cards:
-            items.append({
-                "id": card.id,
-                "word": card.target_word,
-                "part_of_speech": card.part_of_speech,
-                "translation": card.translation,
-                "sentence": card.sentence,
-                "target_language_id": card.target_language_id
-            })
 
         template = self.template_env.get_template("card-list.html.jinja2")
         rsp_body = template.render(
             list_title="List of Cards for %s Language" % language.name,
-            cards=items,
+            cards=cards,
             language=language,
             page=self.page,
             link=f"/cards/{language.slug}/list",

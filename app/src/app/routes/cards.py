@@ -60,7 +60,8 @@ async def add_card(
         translation: Annotated[str, Form()],
         language_id: Annotated[int, Form()],
         part_of_speech: Annotated[PartOfSpeech, Form()],
-        sentence: Annotated[Optional[str], Form()] = None) -> RedirectResponse:
+        sentence: Annotated[Optional[str], Form()] = None,
+        grammar_info: Annotated[Optional[str], Form()] = None) -> RedirectResponse:
     """
     Add a new flash card.
     :param word:
@@ -68,6 +69,7 @@ async def add_card(
     :param language_id:
     :param part_of_speech:
     :param sentence:
+    :param grammar_info:
     :return:
     """
     handler = EditCard(
@@ -76,7 +78,8 @@ async def add_card(
         translation=translation,
         language_id=language_id,
         part_of_speech=part_of_speech,
-        sentence=sentence if sentence != "" else None
+        sentence=sentence if sentence != "" else None,
+        grammar_info=grammar_info if grammar_info != "" else None,
     )
     rsp = await handler.process_request()
     return rsp
@@ -89,7 +92,8 @@ async def edit_card(
         translation: Annotated[str, Form()],
         language_id: Annotated[int, Form()],
         part_of_speech: Annotated[PartOfSpeech, Form()],
-        sentence: Annotated[Optional[str], Form()] = None) -> RedirectResponse:
+        sentence: Annotated[Optional[str], Form()] = None,
+        grammar_info: Annotated[Optional[str], Form()] = None) -> RedirectResponse:
     """
     Add a new flash card.
     :param word:
@@ -98,6 +102,7 @@ async def edit_card(
     :param part_of_speech:
     :param card_id:
     :param sentence:
+    :param grammar_info:
     :return:
     """
     handler = EditCard(
@@ -107,7 +112,8 @@ async def edit_card(
         language_id=language_id,
         part_of_speech=part_of_speech,
         sentence=sentence if sentence != "" else None,
-        card_id=card_id
+        card_id=card_id,
+        grammar_info=grammar_info if grammar_info != "" else None,
     )
     rsp = await handler.process_request()
     return rsp

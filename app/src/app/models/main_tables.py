@@ -69,6 +69,8 @@ class FlashCard(Base):
     part_of_speech: Mapped[PartOfSpeech] = mapped_column(
         sa.types.Enum(PartOfSpeech)
     )
+    grammar_info: Mapped[Optional[str]] =\
+        mapped_column(sa.Text(), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
     updated_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())

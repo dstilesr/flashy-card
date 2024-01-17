@@ -24,6 +24,7 @@ class EditCard(BaseController):
             part_of_speech: PartOfSpeech,
             card_id: Optional[int] = None,
             sentence: Optional[str] = None,
+            grammar_info: Optional[str] = None,
             template_env: Optional[jinja2.Environment] = None):
         """
         :param engine:
@@ -33,6 +34,7 @@ class EditCard(BaseController):
         :param part_of_speech:
         :param card_id:
         :param sentence:
+        :param grammar_info:
         :param template_env:
         """
         super().__init__(engine, template_env)
@@ -43,7 +45,8 @@ class EditCard(BaseController):
             "translation": translation,
             "target_language_id": language_id,
             "sentence": sentence,
-            "part_of_speech": part_of_speech
+            "part_of_speech": part_of_speech,
+            "grammar_info": grammar_info
         }
         if not self.is_create:
             self.args.update(

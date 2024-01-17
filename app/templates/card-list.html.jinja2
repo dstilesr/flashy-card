@@ -16,12 +16,15 @@
 {%- for card in cards %}
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">{{ card.word }}</h2>
+            <h2 class="card-title">{{ card.target_word }}</h2>
         </div>
         <div class="card-body">
-            <b>{{ card.word }} ({{ card.part_of_speech }}):</b> {{ card.translation }}<br>
+            <b>{{ card.target_word }} ({{ card.part_of_speech }}):</b> {{ card.translation }}<br>
             {% if card.sentence is not none -%}
             <b>Example:</b> {{ card.sentence }}<br>
+            {%- endif %}
+            {% if card.grammar_info is not none -%}
+            <b>Grammatical Detail:</b> {{ card.grammar_info }}<br>
             {%- endif %}
             <a class="btn btn-outline-secondary" href="/cards/{{ card.id }}/edit">Edit Card</a>
         </div>
