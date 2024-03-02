@@ -12,3 +12,11 @@ class PartOfSpeech(StrEnum):
     ADVERB = "ADVERB"
     ADJECTIVE = "ADJECTIVE"
     IDIOM = "IDIOM"
+
+
+class StudyType(StrEnum):
+    """
+    Study modes for flash cards.
+    """
+    from_target = "from_target"
+    to_target = "to_target"

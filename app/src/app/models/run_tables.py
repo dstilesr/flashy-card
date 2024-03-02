@@ -4,6 +4,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+from ..enums import StudyType
 from .main_tables import FlashCard, CardDeck
 
 
@@ -47,6 +48,7 @@ class StudyRun(Base):
     completed: Mapped[bool] = mapped_column(default=False)
     random_seed: Mapped[int] = mapped_column(sa.BigInteger)
     card_deck_id: Mapped[int] = mapped_column(sa.ForeignKey("card_decks.id"))
+    run_type: Mapped[StudyType] = mapped_column(sa.types.Enum(StudyType))
 
     # Dates
     started_at: Mapped[datetime] = mapped_column(server_default=sa.func.now())
