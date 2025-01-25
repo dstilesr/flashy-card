@@ -1,13 +1,28 @@
 import os
-from sqlalchemy.ext.asyncio import create_async_engine
+from typing import Optional
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 
-DB_ENGINE = create_async_engine(
-    "postgresql+asyncpg://%s:%s@%s/%s"
-    % (
-        os.getenv("POSTGRES_USER"),
-        os.getenv("POSTGRES_PASSWORD"),
-        os.getenv("DB_HOST"),
-        os.getenv("POSTGRES_DB")
-    ),
-    pool_size=5
-)
+from .settings import DBSettings
+
+
+def get_engine(settings: Optional[DBSettings] = None) -> AsyncEngine:
+    """
+    Get the SQL engine.
+    :param settings:
+    :return:
+    """
+    if settings is None:
+        settings = DBSettings()
+
+    return create_async_engine(
+        "postgresql+asyncpg://%s:%s@%s/%s"
+        % (
+            settings.user,
+            settings.password,
+            settings.host,
+            settings.db
+        ),
+        pool_size=settings.pool_size
+   )
+
+DB_ENGINE = get_engine()
