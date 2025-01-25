@@ -8,7 +8,7 @@ from fastapi.responses import RedirectResponse
 from .. import models as m
 from .. import exceptions as err
 from .base import BaseController
-from ..crud_utils.decks import DecksCRUD
+from ..dao.decks import DecksDAO
 
 
 class AddRemoveFromDeck(BaseController):
@@ -34,7 +34,7 @@ class AddRemoveFromDeck(BaseController):
         self.card_id = card_id
         self.deck_id = deck_id
         self.remove = remove
-        self.deck_crud = DecksCRUD(self.engine)
+        self.deck_crud = DecksDAO(self.engine)
 
     async def get_card(self, session: sa_async.AsyncSession) -> m.FlashCard:
         """

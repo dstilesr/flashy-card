@@ -2,12 +2,12 @@ import sqlalchemy as sa
 from datetime import datetime
 from typing import Dict, Any, Sequence, Optional
 
-from .base import BaseCrud
+from .base import BaseDAO
 from .. import exceptions as err
 from ..models import FlashCard, card_deck_assoc
 
 
-class CardsCRUD(BaseCrud):
+class CardsDAO(BaseDAO):
     """
     Handler for language model crud.
     """
@@ -68,7 +68,7 @@ class CardsCRUD(BaseCrud):
         stmt = stmt.where(condition).order_by(FlashCard.created_at)
         async with self.get_session() as session:
             cards = await session.scalars(stmt)
-            return cards
+            return cards.all()
 
     async def delete(self, card_id: int):
         """

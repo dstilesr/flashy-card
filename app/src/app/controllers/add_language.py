@@ -4,7 +4,7 @@ import sqlalchemy.ext.asyncio as sa_async
 from fastapi.responses import RedirectResponse, HTMLResponse
 
 from .base import BaseController
-from ..crud_utils.languages import LanguageCRUD
+from ..dao.languages import LanguageDAO
 
 
 class AddLanguagePost(BaseController):
@@ -21,7 +21,7 @@ class AddLanguagePost(BaseController):
         :param template_env:
         """
         super().__init__(engine, template_env)
-        self.crud = LanguageCRUD(self.engine)
+        self.crud = LanguageDAO(self.engine)
 
     async def process_request(self, name: str, notes: str) -> RedirectResponse:
         """

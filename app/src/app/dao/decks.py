@@ -3,12 +3,12 @@ from sqlalchemy import orm
 from datetime import datetime
 from typing import Dict, Any, Sequence, Optional
 
-from .base import BaseCrud
+from .base import BaseDAO
 from .. import models as m
 from .. import exceptions as err
 
 
-class DecksCRUD(BaseCrud):
+class DecksDAO(BaseDAO):
     """
     Handler for Card Deck model crud.
     """

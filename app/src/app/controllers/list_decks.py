@@ -7,7 +7,7 @@ import sqlalchemy.ext.asyncio as sa_async
 from fastapi.responses import HTMLResponse
 
 from .base import BaseController
-from ..crud_utils.decks import DecksCRUD
+from ..dao.decks import DecksDAO
 
 
 class ListDecksLang(BaseController):
@@ -27,7 +27,7 @@ class ListDecksLang(BaseController):
         """
         super().__init__(engine, template_env)
         self.language_slug = language_slug
-        self.__crud = DecksCRUD(self.engine)
+        self.__crud = DecksDAO(self.engine)
 
     async def get_language(self) -> m.Language:
         """

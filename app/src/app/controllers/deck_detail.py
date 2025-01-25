@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 
 from .base import BaseController
 from .. import exceptions as err
-from ..crud_utils.decks import DecksCRUD
+from ..dao.decks import DecksDAO
 
 
 class DeckDetail(BaseController):
@@ -36,7 +36,7 @@ class DeckDetail(BaseController):
         :return:
         """
         async with sa_async.AsyncSession(self.engine) as session:
-            stmt = DecksCRUD.deck_with_cards_stmt(self.deck_id)\
+            stmt = DecksDAO.deck_with_cards_stmt(self.deck_id)\
                 .options(orm.subqueryload(m.CardDeck.language))
             res = await session.scalars(stmt)
             deck = res.one_or_none()

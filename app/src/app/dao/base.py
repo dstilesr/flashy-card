@@ -6,7 +6,7 @@ from typing import Dict, Any, Sequence, Optional
 from ..models import Base as ModelBase
 
 
-class BaseCrud(ABC):
+class BaseDAO(ABC):
     """
     Base CRUD utils class.
     """

@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 from .. import models as m
 from .. import exceptions as err
 from .base import BaseController
-from ..crud_utils.decks import DecksCRUD
+from ..dao.decks import DecksDAO
 
 
 class AddRemoveCardsDeckPage(BaseController):
@@ -41,7 +41,7 @@ class AddRemoveCardsDeckPage(BaseController):
         :return:
         """
         async with sa_async.AsyncSession(self.engine) as session:
-            qry = DecksCRUD.deck_with_cards_stmt(self.deck_id)
+            qry = DecksDAO.deck_with_cards_stmt(self.deck_id)
             res = await session.scalars(qry)
             deck = res.one_or_none()
             if deck is None:
@@ -58,7 +58,7 @@ class AddRemoveCardsDeckPage(BaseController):
         :param kwargs:
         :return:
         """
-        deck_crud = DecksCRUD(self.engine)
+        deck_crud = DecksDAO(self.engine)
         deck = await deck_crud.get_one(self.deck_id)
         deck_cards = await self.get_cards_in_deck()
         if self.remove:

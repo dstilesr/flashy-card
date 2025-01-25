@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 
 from .. import models as m
 from .base import BaseController
-from ..crud_utils.decks import DecksCRUD
+from ..dao.decks import DecksDAO
 
 
 class StudyCardPage(BaseController):
@@ -68,7 +68,7 @@ class StudyCardPage(BaseController):
         :return:
         """
         async with sa_async.AsyncSession(self.engine) as session:
-            deck_select = DecksCRUD.deck_with_cards_stmt(self.deck_id)
+            deck_select = DecksDAO.deck_with_cards_stmt(self.deck_id)
             result = await session.scalars(deck_select)
             deck = result.one_or_none()
             self.check_null(deck, "Deck")

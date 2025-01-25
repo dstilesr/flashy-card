@@ -7,7 +7,7 @@ import sqlalchemy.ext.asyncio as sa_async
 from fastapi.responses import RedirectResponse
 
 from .base import BaseController
-from ..crud_utils.decks import DecksCRUD
+from ..dao.decks import DecksDAO
 
 
 class EditCardDeck(BaseController):
@@ -36,7 +36,7 @@ class EditCardDeck(BaseController):
         self.context = context
         self.language_id = language_id
         self.deck_id = deck_id
-        self.deck_crud = DecksCRUD(self.engine)
+        self.deck_crud = DecksDAO(self.engine)
 
     async def edit_deck(self):
         """

@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse
 
 from .base import BaseController
 from ..enums import PartOfSpeech
-from ..crud_utils.cards import CardsCRUD
+from ..dao.cards import CardsDAO
 
 
 class ListCardsLang(BaseController):
@@ -32,7 +32,7 @@ class ListCardsLang(BaseController):
         super().__init__(engine, template_env)
         self.language_slug = language_slug
         self.pos = part_of_speech
-        self.__crud = CardsCRUD(self.engine)
+        self.__crud = CardsDAO(self.engine)
         self.page = page
 
     async def get_language(self) -> m.Language:

@@ -7,8 +7,8 @@ from fastapi.responses import HTMLResponse
 from .. import models as m
 from ..enums import PartOfSpeech
 from .base import BaseController
-from ..crud_utils.decks import DecksCRUD
-from ..crud_utils.languages import LanguageCRUD
+from ..dao.decks import DecksDAO
+from ..dao.languages import LanguageDAO
 
 
 class AddEditDeckPage(BaseController):
@@ -38,8 +38,8 @@ class AddEditDeckPage(BaseController):
         Render the page.
         :return:
         """
-        lang_crud = LanguageCRUD(self.engine)
-        deck_crud = DecksCRUD(self.engine)
+        lang_crud = LanguageDAO(self.engine)
+        deck_crud = DecksDAO(self.engine)
 
         template_params = {
             "language_id": self.language_id

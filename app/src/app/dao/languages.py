@@ -2,13 +2,13 @@ import sqlalchemy as sa
 from datetime import datetime
 from typing import Dict, Any, Sequence, Optional
 
-from .base import BaseCrud
+from .base import BaseDAO
 from ..utils import to_slug
 from ..models import Language
 from .. import exceptions as err
 
 
-class LanguageCRUD(BaseCrud):
+class LanguageDAO(BaseDAO):
     """
     Handler for language model crud.
     """
