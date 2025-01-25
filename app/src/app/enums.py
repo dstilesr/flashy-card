@@ -12,6 +12,7 @@ class PartOfSpeech(StrEnum):
     ADVERB = "ADVERB"
     ADJECTIVE = "ADJECTIVE"
     IDIOM = "IDIOM"
+    ROOT = "ROOT"
 
 
 class StudyType(StrEnum):
