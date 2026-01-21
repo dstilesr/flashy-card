@@ -1,0 +1,11 @@
+[package]
+name = "flashy-card"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+askama = "0.15.1"
+axum = "0.8.8"
+diesel = { version = "2.3.5", features = ["postgres"] }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = "1.49.0"
