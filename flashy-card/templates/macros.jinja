@@ -1,0 +1,17 @@
+{% macro pagination(page, has_next, base_url) %}
+<div class="pagination">
+    <a href="{{ base_url }}?page=1" class="pagination-btn">First</a>
+
+    {%- if page.gt(&1) %}
+    {% let prev = page - 1 %}
+    <a href="{{ base_url }}?page={{ prev }}" class="pagination-btn">Previous</a>
+    {%- endif %}
+
+    <span class="pagination-info">Page {{ page }}</span>
+
+    {%- if has_next %}
+    {% let next = page + 1 %}
+    <a href="{{ base_url }}?page={{ next }}" class="pagination-btn">Next</a>
+    {% endif %}
+</div>
+{%- endmacro %}

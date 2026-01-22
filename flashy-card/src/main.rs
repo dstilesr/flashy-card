@@ -2,6 +2,8 @@ use clap::Parser;
 
 mod templates;
 mod server;
+mod repository;
+mod types;
 
 /// Arguments for application initialization
 #[derive(Parser, Debug)]

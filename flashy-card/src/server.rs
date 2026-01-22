@@ -27,5 +27,6 @@ pub async fn create_router(args: Args) -> Router {
         .nest_service("/static", ServeDir::new(args.static_dir))
         .nest("/api", api_route)
         .route("/", get(views::home_page))
+        .route("/languages", get(views::render_languages_page))
         .with_state(pool)
 }

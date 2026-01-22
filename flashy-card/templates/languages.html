@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% import "macros.jinja" as macros %}
+
+{% block content %}
+<div class="languages-page">
+    <div class="languages-header">
+        <h1>Languages</h1>
+        <p>Browse and select a language to start studying</p>
+    </div>
+
+    <div class="languages-grid">
+        {% for language in languages %}
+        <div class="language-card">
+            <div class="language-card-header">
+                <h2>{{ language.name }}</h2>
+            </div>
+            <div class="language-card-body">
+                {% match language.description %}
+                  {% when Some with (desc) %}
+                  <p class="language-description">{{ desc }}</p>
+                  {% when None %}
+                  <p class="language-description no-description">No description available</p>
+                {% endmatch %}
+            </div>
+            <div class="language-card-footer">
+                <a href="/languages/{{ language.slug }}" class="btn-view">View Decks</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {{ macros::pagination(page=page, has_next=has_next, base_url="/languages") }}
+</div>
+{% endblock %}
