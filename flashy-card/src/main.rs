@@ -23,6 +23,8 @@ struct Args {
 
 #[tokio::main()]
 async fn main() {
+    env_logger::init();
+
     let args = Args::parse();
     let addr = format!("{}:{}", args.bind_address, args.port);
     let listener = tokio::net::TcpListener::bind(addr)

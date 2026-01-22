@@ -8,7 +8,7 @@ const PAGE_SIZE: i32 = 10;
 pub async fn get_languages(page: i32, pool: &postgres::PgPool) -> Result<(Vec<LangInfo>, bool), String> {
     let mut out = sqlx::query_as::<_, LangInfo>("select * from languages limit ? offset ?;")
         .bind(page * PAGE_SIZE + 1)
-        .bind(PAGE_SIZE)
+        .bind(page - 1)
         .fetch_all(pool)
         .await
         .map_err(|e| {

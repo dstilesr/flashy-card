@@ -24,6 +24,7 @@ services:
       context: "./flashy-card"
     environment:
       DATABASE_URL: "postgres://dev:dev@postgres/flashcards"
+      RUST_LOG: "debug"
     ports:
       - "3000:3000"
 
