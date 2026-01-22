@@ -1,10 +1,12 @@
 mod views;
+mod api;
 
 use super::Args;
 use sqlx::postgres;
 use axum::Router;
 use axum::routing::{get, post};
 use tower_http::services::ServeDir;
+
 
 
 /// Create a new router to serve requests
@@ -18,9 +20,12 @@ pub async fn create_router(args: Args) -> Router {
     let pool = conn_opts.connect(&conn_string).await
         .expect("Can't connect to database");
 
+    let api_route = api::make_api_router();
+
     // Setup Router and Routes
     Router::new()
-        .with_state(pool)
         .nest_service("/static", ServeDir::new(args.static_dir))
+        .nest("/api", api_route)
         .route("/", get(views::home_page))
+        .with_state(pool)
 }

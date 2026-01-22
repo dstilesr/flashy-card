@@ -446,6 +446,7 @@ dependencies = [
  "clap",
  "log",
  "serde",
+ "serde_json",
  "sqlx",
  "tokio",
  "tower-http",
