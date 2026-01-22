@@ -6,40 +6,21 @@ use axum::Router;
 use axum::routing::{get, post};
 use tower_http::services::ServeDir;
 
-/// Application Server
-pub struct Server {
-    pool: postgres::PgPool,
-    static_dir: String,
-}
 
-impl Server {
+/// Create a new router to serve requests
+pub async fn create_router(args: Args) -> Router {
 
-    /// Initialize a new server. This will create the router and start the connection pool,
-    /// and return the initialized server.
-    pub async fn new(args: Args) -> Self {
-        let conn_string = std::env::var("DATABASE_URL")
-            .expect("Found no DATABASE_URL in environment");
+    // Initialize the DB connection pool
+    let conn_string = std::env::var("DATABASE_URL")
+        .expect("Found no DATABASE_URL in environment");
+    let conn_opts = postgres::PgPoolOptions::new()
+        .max_connections(args.max_db_connections);
+    let pool = conn_opts.connect(&conn_string).await
+        .expect("Can't connect to database");
 
-
-        let conn_opts = postgres::PgPoolOptions::new()
-            .max_connections(args.max_db_connections);
-        let pool = conn_opts.connect(&conn_string).await
-            .expect("Can't connect to database");
-
-        Self { pool, static_dir: args.static_dir }
-    }
-
-    /// Setup the router to handle requests
-    fn setup_router(static_files_path: &str) -> Router{
-        Router::new()
-            .nest_service("/static", ServeDir::new(static_files_path))
-            .route("/", get(views::home_page))
-    }
-
-    /// Start the server with the given listener
-    pub async fn serve(&self, listener: tokio::net::TcpListener) {
-        log::info!("Starting server...");
-        let router = Self::setup_router(&self.static_dir);
-        axum::serve(listener, router).await.unwrap()
-    }
+    // Setup Router and Routes
+    Router::new()
+        .with_state(pool)
+        .nest_service("/static", ServeDir::new(args.static_dir))
+        .route("/", get(views::home_page))
 }
