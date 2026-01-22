@@ -1,5 +1,6 @@
+mod templates;
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() {
     println!("Hello, world!");
 }
