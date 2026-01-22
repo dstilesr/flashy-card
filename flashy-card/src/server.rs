@@ -17,13 +17,13 @@ impl Server {
     /// Initialize a new server. This will create the router and start the connection pool,
     /// and return the initialized server.
     pub async fn new(args: Args) -> Self {
-        let conn_string = option_env!("DATABASE_URL")
+        let conn_string = std::env::var("DATABASE_URL")
             .expect("Found no DATABASE_URL in environment");
 
 
         let conn_opts = postgres::PgPoolOptions::new()
             .max_connections(args.max_db_connections);
-        let pool = conn_opts.connect(conn_string).await
+        let pool = conn_opts.connect(&conn_string).await
             .expect("Can't connect to database");
 
         Self { pool, static_dir: args.static_dir }
