@@ -6,6 +6,6 @@ edition = "2024"
 [dependencies]
 askama = "0.15.1"
 axum = "0.8.8"
-diesel = { version = "2.3.5", features = ["postgres"] }
 serde = { version = "1.0.228", features = ["derive"] }
+sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio"] }
 tokio = "1.49.0"
