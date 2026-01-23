@@ -28,5 +28,6 @@ pub async fn create_router(args: Args) -> Router {
         .nest("/api", api_route)
         .route("/", get(views::home_page))
         .route("/languages", get(views::render_languages_page))
+        .route("/error", get(views::error_page))
         .with_state(pool)
 }

@@ -1,6 +1,6 @@
-use sqlx::postgres;
+use sqlx::{postgres, PgPool};
 
-use super::types::LangInfo;
+use super::types::{LangInfo, CardType};
 
 const PAGE_SIZE: i32 = 10;
 
@@ -24,4 +24,66 @@ pub async fn get_languages(page: i32, pool: &postgres::PgPool) -> Result<(Vec<La
         out.pop();
     }
     Ok((out, has_next))
+}
+
+/// Get a list of all card types.
+pub async fn list_card_types(pool: &PgPool) -> Result<Vec<CardType>, String> {
+    sqlx::query_as::<_, CardType>("select * from card_types;")
+        .fetch_all(pool)
+        .await
+        .map_err(|e| {
+            log::error!("Unable to fetch card types: {}", e);
+            "Unable to read card types from database".to_string()
+        })
+}
+
+/// Create a URL-safe slug from a language name
+fn create_slug(name: &str) -> String {
+    name.to_lowercase()
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() {
+                c
+            } else if c.is_whitespace() || c == '-' {
+                '-'
+            } else {
+                '_'
+            }
+        })
+        .collect::<String>()
+        .split('-')
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>()
+        .join("-")
+}
+
+/// Insert a new language into the database
+pub async fn add_language(name: String, description: Option<String>, pool: &postgres::PgPool) -> Result<(), String> {
+    let slug = create_slug(&name);
+    let result = sqlx::query!(
+        "INSERT INTO languages (name, slug, description) VALUES ($1, $2, $3)",
+        name,
+        slug,
+        description
+    )
+    .execute(pool)
+    .await;
+
+    match result {
+        Ok(_) => {
+            log::info!("Successfully added language: {} (slug: {})", name, slug);
+            Ok(())
+        }
+        Err(e) => {
+            // Check if it's a unique constraint violation
+            if let Some(db_err) = e.as_database_error() {
+                if db_err.is_unique_violation() {
+                    log::warn!("Language with slug '{}' already exists", slug);
+                    return Err(format!("A language with a similar name already exists (slug: {})", slug));
+                }
+            }
+            log::error!("Failed to insert language '{}': {}", name, e);
+            Err("Failed to create language in database".to_string())
+        }
+    }
 }

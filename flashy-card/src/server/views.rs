@@ -19,6 +19,12 @@ pub struct Paginate {
     page: i32,
 }
 
+/// Error page query parameters
+#[derive(Deserialize)]
+pub struct ErrorQuery {
+    pub title: String,
+}
+
 /// Render the error page into a response with the given status code.
 pub fn render_error_page(err_title: String, err_msg: String, status_code: StatusCode) -> Response {
     let error_page = templates::ErrorPage {
@@ -33,6 +39,15 @@ pub fn render_error_page(err_title: String, err_msg: String, status_code: Status
 pub async fn home_page() -> Response {
     let content = templates::HomePage.render().unwrap();
     Html(content).into_response()
+}
+
+/// Render the error page with the given title from query parameters
+pub async fn error_page(Query(error_query): Query<ErrorQuery>) -> Response {
+    render_error_page(
+        error_query.title,
+        String::from("Unable to complete request"),
+        StatusCode::BAD_REQUEST,
+    )
 }
 
 /// Render the languages list page
