@@ -17,6 +17,15 @@ pub struct CardType {
     pub type_name: String,
 }
 
+/// Represents a summary of a card deck for display
+#[derive(FromRow, Debug)]
+pub struct DeckSummary {
+    pub name: String,
+    pub description: Option<String>,
+    pub language_name: String,
+    pub total_cards: i32,
+}
+
 /// Response for a list of card types request to the API
 #[derive(Debug, Serialize)]
 pub struct CardTypeList {

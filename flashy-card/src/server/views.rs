@@ -11,6 +11,10 @@ fn default_page() -> i32 {
     1
 }
 
+fn default_error_title() -> String {
+    "Unable to Complete Request".to_string()
+}
+
 /// Pagination parameters
 #[derive(Deserialize)]
 pub struct Paginate {
@@ -22,6 +26,8 @@ pub struct Paginate {
 /// Error page query parameters
 #[derive(Deserialize)]
 pub struct ErrorQuery {
+
+    #[serde(default = "default_error_title")]
     pub title: String,
 }
 

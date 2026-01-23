@@ -156,10 +156,15 @@ nav a:hover {
     text-decoration: none;
     transition: background-color 0.3s;
     font-weight: 500;
+    text-align: center;
 }
 
 .btn-view:hover {
     background-color: #2980b9;
+}
+
+.deck-card-footer .btn-view {
+    flex: 1;
 }
 
 /* Pagination */
@@ -257,4 +262,193 @@ nav a:hover {
 
 .btn-secondary:hover {
     background-color: #7f8c8d;
+}
+
+/* Add Language Form */
+.add-language-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-top: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-language-form h2 {
+    color: #2c3e50;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+}
+
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group input[type="text"]::placeholder {
+    color: #999;
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: #27ae60;
+    color: white;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.btn-submit:hover {
+    background-color: #229954;
+}
+
+.btn-submit:active {
+    transform: translateY(1px);
+}
+
+/* Decks page */
+.decks-page {
+    padding: 2rem 0;
+}
+
+.decks-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.decks-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.decks-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.decks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.deck-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.deck-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.deck-card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.deck-card-header h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.deck-language {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.deck-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.deck-description {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.deck-description.no-description {
+    color: #999;
+    font-style: italic;
+}
+
+.deck-stats {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-count {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.deck-card-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-study {
+    display: inline-block;
+    background-color: #27ae60;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-study:hover {
+    background-color: #229954;
 }
