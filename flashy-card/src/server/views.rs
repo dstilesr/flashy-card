@@ -135,3 +135,43 @@ pub async fn render_language_decks_page(
         }
     }
 }
+
+/// Render the add card form page for a specific language
+pub async fn render_add_card_page(
+    State(pool): State<PgPool>,
+    Path(language_slug): Path<String>,
+) -> Response {
+    // Fetch the language name from the slug
+    let language_name = match repository::get_language_name(&language_slug, &pool).await {
+        Ok(name) => name,
+        Err(e) => {
+            let status = if e.contains("not found") {
+                StatusCode::NOT_FOUND
+            } else {
+                StatusCode::INTERNAL_SERVER_ERROR
+            };
+            return render_error_page(
+                String::from("Error Getting Language"),
+                e,
+                status,
+            );
+        }
+    };
+
+    // Fetch card types
+    match repository::list_card_types(&pool).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Card Types"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok(card_types) => {
+            let template = templates::AddCardPage {
+                language_slug,
+                language_name,
+                card_types,
+            };
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}

@@ -30,6 +30,7 @@ pub async fn create_router(args: Args) -> Router {
         .route("/languages", get(views::render_languages_page))
         .route("/decks", get(views::render_all_decks_page))
         .route("/{language_slug}/decks", get(views::render_language_decks_page))
+        .route("/{language_slug}/add-card", get(views::render_add_card_page))
         .route("/error", get(views::error_page))
         .with_state(pool)
 }

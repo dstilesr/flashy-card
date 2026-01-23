@@ -145,6 +145,9 @@ nav a:hover {
 .language-card-footer {
     padding: 1.5rem;
     border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .btn-view {
@@ -165,6 +168,22 @@ nav a:hover {
 
 .deck-card-footer .btn-view {
     flex: 1;
+}
+
+.btn-add {
+    display: inline-block;
+    background-color: #27ae60;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    text-align: center;
+}
+
+.btn-add:hover {
+    background-color: #229954;
 }
 
 /* Pagination */
@@ -451,4 +470,106 @@ nav a:hover {
 
 .btn-study:hover {
     background-color: #229954;
+}
+
+/* Add Card Page */
+.add-card-page {
+    padding: 2rem 0;
+}
+
+.add-card-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.add-card-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.add-card-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.add-card-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-card-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.add-card-form select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.add-card-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    resize: vertical;
+}
+
+.add-card-form textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.required {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-cancel {
+    flex: 1;
+    display: inline-block;
+    background-color: #95a5a6;
+    color: white;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.btn-cancel:hover {
+    background-color: #7f8c8d;
+}
+
+.form-actions .btn-submit {
+    flex: 2;
 }

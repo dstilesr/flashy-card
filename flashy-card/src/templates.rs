@@ -1,5 +1,5 @@
 use askama::Template;
-use super::types::{LangInfo, DeckSummary};
+use super::types::{LangInfo, DeckSummary, CardType};
 
 #[derive(Template)]
 #[template(path = "home.html")]
@@ -27,4 +27,12 @@ pub struct DecksPage {
     pub decks: Vec<DeckSummary>,
     pub page: i32,
     pub has_next: bool,
+}
+
+#[derive(Template)]
+#[template(path = "add_card.html")]
+pub struct AddCardPage {
+    pub language_slug: String,
+    pub language_name: String,
+    pub card_types: Vec<CardType>,
 }

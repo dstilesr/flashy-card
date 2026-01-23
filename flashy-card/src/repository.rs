@@ -1,6 +1,6 @@
 use sqlx::postgres::PgPool;
 
-use super::types::{LangInfo, CardType, DeckSummary};
+use super::types::{LangInfo, CardType, DeckSummary, CardSummary, AddCardForm};
 
 const PAGE_SIZE: i32 = 10;
 
@@ -35,6 +35,28 @@ pub async fn list_card_types(pool: &PgPool) -> Result<Vec<CardType>, String> {
             log::error!("Unable to fetch card types: {}", e);
             "Unable to read card types from database".to_string()
         })
+}
+
+/// Get the language name from a slug
+pub async fn get_language_name(slug: &str, pool: &PgPool) -> Result<String, String> {
+    let result = sqlx::query!(
+        "SELECT name FROM languages WHERE slug = $1",
+        slug
+    )
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| {
+        log::error!("Database error fetching language with slug '{}': {}", slug, e);
+        "Unable to query language from database".to_string()
+    })?;
+
+    match result {
+        Some(record) => Ok(record.name),
+        None => {
+            log::warn!("Language with slug '{}' not found", slug);
+            Err(format!("Language '{}' not found", slug))
+        }
+    }
 }
 
 /// Create a URL-safe slug from a language name
@@ -151,4 +173,105 @@ pub async fn list_decks(
         result.pop();
     }
     Ok((result, has_next))
+}
+
+/// Get the list of cards for a given language.
+pub async fn list_cards(
+    language_slug: String,
+    page: i32,
+    pool: &PgPool
+) -> Result<(Vec<CardSummary>, bool), String> {
+    if page <= 0 {
+        return Err("Page must be greater than 0".to_string());
+    }
+
+    let start = (page - 1) * PAGE_SIZE;
+    let limit = PAGE_SIZE + 1;
+
+    let mut result = sqlx::query_as::<_, CardSummary>(r#"
+        select c.target,
+               c.hint,
+               c.examples,
+               c.additional_info,
+               ct.type_name,
+               l.name as language
+        from cards as c
+        join card_types as ct on ct.id = c.type_id
+        join languages as l on l.id = c.language_id
+        where l.slug = $1
+        order by c.id desc
+        limit $2
+        offset $3;
+        "#)
+        .bind(language_slug)
+        .bind(limit)
+        .bind(start)
+        .fetch_all(pool)
+        .await
+        .map_err(|e| {
+            log::error!("Unable to fetch cards: {}", e);
+            "Unable to read cards from database".to_string()
+        })?;
+
+    let has_next = result.len() > PAGE_SIZE as usize;
+    if has_next {
+        result.pop();
+    }
+    Ok((result, has_next))
+}
+
+/// Insert a new card into the database
+pub async fn add_card(form: AddCardForm, pool: &PgPool) -> Result<(), String> {
+    // First, look up the language_id from the slug
+    let language_result = sqlx::query!(
+        "SELECT id FROM languages WHERE slug = $1",
+        form.language_slug
+    )
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| {
+        log::error!("Failed to look up language '{}': {}", form.language_slug, e);
+        "Failed to query language from database".to_string()
+    })?;
+
+    let language_id = match language_result {
+        Some(record) => record.id,
+        None => {
+            log::warn!("Language with slug '{}' not found", form.language_slug);
+            return Err(format!("Language '{}' not found", form.language_slug));
+        }
+    };
+
+    // Insert the card
+    let result = sqlx::query!(
+        r#"INSERT INTO cards (type_id, language_id, target, translation, hint, examples, additional_info)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)"#,
+        form.type_id,
+        language_id,
+        form.target,
+        form.translation,
+        form.hint,
+        form.examples,
+        form.additional_info
+    )
+    .execute(pool)
+    .await;
+
+    match result {
+        Ok(_) => {
+            log::info!("Successfully added card '{}' for language '{}'", form.target, form.language_slug);
+            Ok(())
+        }
+        Err(e) => {
+            // Check if it's a foreign key violation (invalid type_id)
+            if let Some(db_err) = e.as_database_error() {
+                if db_err.is_foreign_key_violation() {
+                    log::warn!("Invalid type_id {} or language_id {}", form.type_id, language_id);
+                    return Err("Invalid card type or language".to_string());
+                }
+            }
+            log::error!("Failed to insert card '{}': {}", form.target, e);
+            Err("Failed to create card in database".to_string())
+        }
+    }
 }

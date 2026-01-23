@@ -52,6 +52,27 @@ pub async fn add_language(
     }
 }
 
+/// Add a new card from form data and redirect to languages page
+pub async fn add_card(
+    State(pool): State<PgPool>,
+    Form(form): Form<types::AddCardForm>,
+) -> Response {
+    log::debug!("Adding card: {} for language {}", form.target, form.language_slug);
+
+    match repository::add_card(form, &pool).await {
+        Ok(_) => {
+            log::info!("Card added successfully, redirecting to /languages");
+            Redirect::to("/languages").into_response()
+        }
+        Err(error) => {
+            log::error!("Failed to add card: {}", error);
+            // Redirect to error page with the error title
+            let error_url = format!("/error?title={}", urlencoding::encode(&error));
+            Redirect::to(&error_url).into_response()
+        }
+    }
+}
+
 /// Instantiate and setup routes for the API router. This router will handle endpoints for
 /// the internal API, not meant to return HTML views.
 pub fn make_api_router() -> Router<PgPool> {
@@ -59,4 +80,5 @@ pub fn make_api_router() -> Router<PgPool> {
         .route("/health", get(health))
         .route("/card-types", get(get_card_types))
         .route("/languages/add", post(add_language))
+        .route("/cards/add", post(add_card))
 }

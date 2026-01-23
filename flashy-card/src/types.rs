@@ -26,6 +26,18 @@ pub struct DeckSummary {
     pub total_cards: i32,
 }
 
+/// Represents a card for display in list views
+#[derive(FromRow, Debug)]
+pub struct CardSummary {
+    pub target: String,
+    pub hint: Option<String>,
+    pub examples: Option<String>,
+    pub additional_info: Option<String>,
+    #[sqlx(rename = "type_name")]
+    pub card_type: String,
+    pub language: String,
+}
+
 /// Response for a list of card types request to the API
 #[derive(Debug, Serialize)]
 pub struct CardTypeList {
@@ -44,4 +56,16 @@ pub struct ErrorResponse {
 pub struct AddLanguageForm {
     pub name: String,
     pub description: Option<String>,
+}
+
+/// Form data for adding a new card
+#[derive(Debug, Deserialize)]
+pub struct AddCardForm {
+    pub type_id: i32,
+    pub language_slug: String,
+    pub target: String,
+    pub translation: String,
+    pub hint: Option<String>,
+    pub examples: Option<String>,
+    pub additional_info: Option<String>,
 }
