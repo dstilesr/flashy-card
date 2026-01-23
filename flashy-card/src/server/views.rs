@@ -2,7 +2,7 @@ use serde::Deserialize;
 use askama::Template;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Response};
-use axum::extract::{Query, State};
+use axum::extract::{Query, State, Path};
 use sqlx::PgPool;
 use super::super::{templates, repository};
 
@@ -73,6 +73,64 @@ pub async fn render_languages_page(State(pool): State<PgPool>, Query(pagination)
         ),
         Ok((languages, has_next)) => {
             let template = templates::LanguagesPage{languages, has_next, page: pagination.page};
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}
+
+/// Render the decks list page for all languages
+pub async fn render_all_decks_page(State(pool): State<PgPool>, Query(pagination): Query<Paginate>) -> Response {
+    if pagination.page <= 0 {
+        return render_error_page(
+            String::from("Invalid Page Number"),
+            String::from("Page must be greater than 0."),
+            StatusCode::BAD_REQUEST,
+        );
+    }
+    match repository::list_decks(None, pagination.page, &pool).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Decks"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok((decks, has_next)) => {
+            let template = templates::DecksPage {
+                base_url: String::from("/decks"),
+                decks,
+                page: pagination.page,
+                has_next,
+            };
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}
+
+/// Render the decks list page for a specific language
+pub async fn render_language_decks_page(
+    State(pool): State<PgPool>,
+    Path(language_slug): Path<String>,
+    Query(pagination): Query<Paginate>,
+) -> Response {
+    if pagination.page <= 0 {
+        return render_error_page(
+            String::from("Invalid Page Number"),
+            String::from("Page must be greater than 0."),
+            StatusCode::BAD_REQUEST,
+        );
+    }
+    match repository::list_decks(Some(language_slug.clone()), pagination.page, &pool).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Decks"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok((decks, has_next)) => {
+            let template = templates::DecksPage {
+                base_url: format!("/{}/decks", language_slug),
+                decks,
+                page: pagination.page,
+                has_next,
+            };
             Html(template.render().unwrap()).into_response()
         }
     }

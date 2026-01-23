@@ -105,16 +105,15 @@ pub async fn list_decks(
 
     let query = if let Some(slug) = language_slug {
         sqlx::query_as::<_, DeckSummary>(r#"
-            select d.id,
-                   d.name,
+            select d.name,
                    d.description,
-                   min(l.name) as language_name,
-                   count(distinct ctd.card_id) as total_cards
-            from decks as d
+                   l.name as language_name,
+                   coalesce(count(distinct ctd.card_id), 0)::int as total_cards
+            from card_decks as d
             join languages as l on l.id = d.language_id
             left join card_to_deck as ctd on ctd.deck_id = d.id
             where l.slug = $1
-            group by d.id
+            group by d.id, d.name, d.description, l.name
             order by d.id desc
             limit $2
             offset $3;
@@ -124,15 +123,14 @@ pub async fn list_decks(
             .bind(start)
     } else {
         sqlx::query_as::<_, DeckSummary>(r#"
-            select d.id,
-                   d.name,
+            select d.name,
                    d.description,
-                   min(l.name) as language_name,
-                   count(distinct ctd.card_id) as total_cards
-            from decks as d
+                   l.name as language_name,
+                   coalesce(count(distinct ctd.card_id), 0)::int as total_cards
+            from card_decks as d
             join languages as l on l.id = d.language_id
             left join card_to_deck as ctd on ctd.deck_id = d.id
-            group by d.id
+            group by d.id, d.name, d.description, l.name
             order by d.id desc
             limit $1
             offset $2;
@@ -148,10 +146,9 @@ pub async fn list_decks(
             "Unable to read decks from database".to_string()
         })?;
 
-    if result.len() > limit as usize {
+    let has_next = result.len() > PAGE_SIZE as usize;
+    if has_next {
         result.pop();
-        Ok((result, true))
-    } else {
-        Ok((result, false))
     }
+    Ok((result, has_next))
 }
