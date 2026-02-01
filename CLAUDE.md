@@ -165,10 +165,11 @@ Templates, static files, and migrations must be copied to appropriate stages.
 ### Adding Routes
 
 **For HTML views:**
-1. Add handler function in `server/views.rs`
-2. Register route in `server.rs` `create_router()` function
-3. Create template struct in `templates.rs` if needed
-4. Create corresponding HTML template in `templates/` directory
+1. Do not assume the CSS styles you need exist. Check the stylesheet to find what you need if it exists, or add it if it does not.
+2. Add handler function in `server/views.rs`
+3. Register route in `server.rs` `create_router()` function
+4. Create template struct in `templates.rs` if needed
+5. Create corresponding HTML template in `templates/` directory
 
 **For API endpoints:**
 1. Add handler function in `server/api.rs`
