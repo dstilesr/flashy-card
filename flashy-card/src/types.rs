@@ -21,6 +21,7 @@ pub struct CardType {
 #[derive(FromRow, Debug)]
 pub struct DeckSummary {
     pub name: String,
+    pub slug: String,
     pub description: Option<String>,
     pub language_name: String,
     pub total_cards: i32,
@@ -30,6 +31,7 @@ pub struct DeckSummary {
 #[derive(FromRow, Debug)]
 pub struct CardSummary {
     pub target: String,
+    pub translation: String,
     pub hint: Option<String>,
     pub examples: Option<String>,
     pub additional_info: Option<String>,

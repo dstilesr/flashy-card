@@ -290,3 +290,111 @@ pub async fn render_edit_deck_page(
         }
     }
 }
+
+/// Render the cards page for a specific language
+pub async fn render_language_cards_page(
+    State(pool): State<PgPool>,
+    Path(language_slug): Path<String>,
+    Query(pagination): Query<Paginate>,
+) -> Response {
+    if pagination.page <= 0 {
+        return render_error_page(
+            String::from("Invalid Page Number"),
+            String::from("Page must be greater than 0."),
+            StatusCode::BAD_REQUEST,
+        );
+    }
+
+    // Fetch language name
+    let language_name = match repository::get_language_name(&language_slug, &pool).await {
+        Ok(name) => name,
+        Err(e) => {
+            let status = if e.contains("not found") {
+                StatusCode::NOT_FOUND
+            } else {
+                StatusCode::INTERNAL_SERVER_ERROR
+            };
+            return render_error_page(
+                String::from("Error Getting Language"),
+                e,
+                status,
+            );
+        }
+    };
+
+    // Fetch cards for the language
+    match repository::list_cards(language_slug.clone(), pagination.page, &pool).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Cards"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok((cards, has_next)) => {
+            let template = templates::CardsPage {
+                cards,
+                page: pagination.page,
+                has_next,
+                base_url: format!("/{}/cards", language_slug),
+                title: format!("Cards in {}", language_name),
+                subtitle: format!("All flashcards for {}", language_name),
+                back_url: format!("/{}/decks", language_slug),
+                back_label: String::from("Back to Decks"),
+            };
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}
+
+/// Render the cards page for a specific deck
+pub async fn render_deck_cards_page(
+    State(pool): State<PgPool>,
+    Path(deck_slug): Path<String>,
+    Query(pagination): Query<Paginate>,
+) -> Response {
+    if pagination.page <= 0 {
+        return render_error_page(
+            String::from("Invalid Page Number"),
+            String::from("Page must be greater than 0."),
+            StatusCode::BAD_REQUEST,
+        );
+    }
+
+    // Fetch deck info
+    let deck = match repository::get_deck_by_slug(&deck_slug, &pool).await {
+        Ok(d) => d,
+        Err(e) => {
+            let status = if e.contains("not found") {
+                StatusCode::NOT_FOUND
+            } else {
+                StatusCode::INTERNAL_SERVER_ERROR
+            };
+            return render_error_page(
+                String::from("Error Getting Deck"),
+                e,
+                status,
+            );
+        }
+    };
+
+    // Fetch cards for the deck
+    match repository::list_cards_for_deck(&deck_slug, pagination.page, &pool).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Cards"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok((cards, has_next)) => {
+            let template = templates::CardsPage {
+                cards,
+                page: pagination.page,
+                has_next,
+                base_url: format!("/decks/{}/cards", deck_slug),
+                title: format!("Cards in {}", deck.name),
+                subtitle: format!("{} - {}", deck.language_name, deck.name),
+                back_url: format!("/{}/decks", deck.language_slug),
+                back_label: String::from("Back to Decks"),
+            };
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}

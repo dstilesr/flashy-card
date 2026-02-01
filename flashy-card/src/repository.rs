@@ -128,6 +128,7 @@ pub async fn list_decks(
     let query = if let Some(slug) = language_slug {
         sqlx::query_as::<_, DeckSummary>(r#"
             select d.name,
+                   d.slug,
                    d.description,
                    l.name as language_name,
                    coalesce(count(distinct ctd.card_id), 0)::int as total_cards
@@ -135,7 +136,7 @@ pub async fn list_decks(
             join languages as l on l.id = d.language_id
             left join card_to_deck as ctd on ctd.deck_id = d.id
             where l.slug = $1
-            group by d.id, d.name, d.description, l.name
+            group by d.id, d.name, d.slug, d.description, l.name
             order by d.id desc
             limit $2
             offset $3;
@@ -146,13 +147,14 @@ pub async fn list_decks(
     } else {
         sqlx::query_as::<_, DeckSummary>(r#"
             select d.name,
+                   d.slug,
                    d.description,
                    l.name as language_name,
                    coalesce(count(distinct ctd.card_id), 0)::int as total_cards
             from card_decks as d
             join languages as l on l.id = d.language_id
             left join card_to_deck as ctd on ctd.deck_id = d.id
-            group by d.id, d.name, d.description, l.name
+            group by d.id, d.name, d.slug, d.description, l.name
             order by d.id desc
             limit $1
             offset $2;
@@ -190,6 +192,7 @@ pub async fn list_cards(
 
     let mut result = sqlx::query_as::<_, CardSummary>(r#"
         select c.target,
+               c.translation,
                c.hint,
                c.examples,
                c.additional_info,
@@ -488,4 +491,73 @@ pub async fn add_card_to_deck(
             Err("Failed to add card to deck".to_string())
         }
     }
+}
+
+/// Get deck information by slug without requiring language slug
+pub async fn get_deck_by_slug(
+    deck_slug: &str,
+    pool: &PgPool
+) -> Result<DeckInfo, String> {
+    sqlx::query_as::<_, DeckInfo>(r#"
+        SELECT d.id, d.name, d.slug, d.description,
+               l.name as language_name, l.slug as language_slug
+        FROM card_decks d
+        JOIN languages l ON l.id = d.language_id
+        WHERE d.slug = $1
+    "#)
+    .bind(deck_slug)
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| {
+        log::error!("Failed to fetch deck info for {}: {}", deck_slug, e);
+        "Unable to query deck from database".to_string()
+    })?
+    .ok_or_else(|| "Deck not found".to_string())
+}
+
+/// Get cards that belong to a specific deck
+pub async fn list_cards_for_deck(
+    deck_slug: &str,
+    page: i32,
+    pool: &PgPool
+) -> Result<(Vec<CardSummary>, bool), String> {
+    if page <= 0 {
+        return Err("Page must be greater than 0".to_string());
+    }
+
+    let start = (page - 1) * PAGE_SIZE;
+    let limit = PAGE_SIZE + 1;
+
+    let mut result = sqlx::query_as::<_, CardSummary>(r#"
+        SELECT c.target,
+               c.translation,
+               c.hint,
+               c.examples,
+               c.additional_info,
+               ct.type_name,
+               l.name as language
+        FROM cards c
+        JOIN card_types ct ON ct.id = c.type_id
+        JOIN languages l ON l.id = c.language_id
+        JOIN card_to_deck ctd ON ctd.card_id = c.id
+        JOIN card_decks d ON d.id = ctd.deck_id
+        WHERE d.slug = $1
+        ORDER BY c.id DESC
+        LIMIT $2 OFFSET $3
+        "#)
+        .bind(deck_slug)
+        .bind(limit)
+        .bind(start)
+        .fetch_all(pool)
+        .await
+        .map_err(|e| {
+            log::error!("Unable to fetch cards for deck {}: {}", deck_slug, e);
+            "Unable to read cards from database".to_string()
+        })?;
+
+    let has_next = result.len() > PAGE_SIZE as usize;
+    if has_next {
+        result.pop();
+    }
+    Ok((result, has_next))
 }

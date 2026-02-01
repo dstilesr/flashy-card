@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% import "macros.jinja" as macros %}
+
+{% block content %}
+<div class="cards-page">
+    <div class="cards-header">
+        <h1>{{ title }}</h1>
+        <p>{{ subtitle }}</p>
+        <div class="back-link">
+            <a href="{{ back_url }}" class="btn-secondary">{{ back_label }}</a>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        {% for card in cards %}
+        <div class="card-item">
+            <div class="card-item-header">
+                <h2>{{ card.target }}</h2>
+                <span class="card-type-badge">{{ card.card_type }}</span>
+            </div>
+            <div class="card-item-body">
+                <div class="card-translation">
+                    <strong>Translation:</strong> {{ card.translation }}
+                </div>
+                {% match card.hint %}
+                    {% when Some with (h) %}
+                    <div class="card-hint">
+                        <strong>Hint:</strong> {{ h }}
+                    </div>
+                    {% when None %}
+                {% endmatch %}
+                {% match card.examples %}
+                    {% when Some with (ex) %}
+                    <div class="card-examples">
+                        <strong>Examples:</strong> {{ ex }}
+                    </div>
+                    {% when None %}
+                {% endmatch %}
+                {% match card.additional_info %}
+                    {% when Some with (info) %}
+                    <div class="card-additional">
+                        <strong>Notes:</strong> {{ info }}
+                    </div>
+                    {% when None %}
+                {% endmatch %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {{ macros::pagination(page=page, has_next=has_next, base_url=base_url) }}
+</div>
+{% endblock %}

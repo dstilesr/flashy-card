@@ -1,5 +1,5 @@
 use askama::Template;
-use super::types::{LangInfo, DeckSummary, CardType, CardWithId, DeckInfo};
+use super::types::{LangInfo, DeckSummary, CardType, CardWithId, DeckInfo, CardSummary};
 
 #[derive(Template)]
 #[template(path = "home.html")]
@@ -54,4 +54,17 @@ pub struct EditDeckPage {
     pub has_next: bool,
     pub type_filter: Option<i32>,
     pub base_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "cards.html")]
+pub struct CardsPage {
+    pub cards: Vec<CardSummary>,
+    pub page: i32,
+    pub has_next: bool,
+    pub base_url: String,
+    pub title: String,
+    pub subtitle: String,
+    pub back_url: String,
+    pub back_label: String,
 }
