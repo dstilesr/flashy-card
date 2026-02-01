@@ -73,6 +73,68 @@ pub async fn add_card(
     }
 }
 
+/// Create a new deck from form data and redirect to edit page
+pub async fn create_deck(
+    State(pool): State<PgPool>,
+    Form(form): Form<types::AddDeckForm>,
+) -> Response {
+    log::debug!("Creating deck: {} for language {}", form.name, form.language_slug);
+
+    match repository::create_deck(
+        form.language_slug.clone(),
+        form.name,
+        form.description,
+        &pool
+    ).await {
+        Ok(deck_slug) => {
+            log::info!("Deck created successfully, redirecting to edit page");
+            // Redirect to edit page for the new deck
+            let edit_url = format!("/{}/decks/{}/edit", form.language_slug, deck_slug);
+            Redirect::to(&edit_url).into_response()
+        }
+        Err(error) => {
+            log::error!("Failed to create deck: {}", error);
+            let error_url = format!("/error?title={}", urlencoding::encode(&error));
+            Redirect::to(&error_url).into_response()
+        }
+    }
+}
+
+/// Add a card to a deck and redirect back to edit page with same pagination/filter
+pub async fn add_card_to_deck(
+    State(pool): State<PgPool>,
+    Form(form): Form<types::AddCardToDeckForm>,
+) -> Response {
+    log::debug!("Adding card {} to deck {}", form.card_id, form.deck_slug);
+
+    match repository::add_card_to_deck(
+        form.card_id,
+        &form.deck_slug,
+        &form.language_slug,
+        &pool
+    ).await {
+        Ok(_) => {
+            log::info!("Card added to deck successfully");
+            // Build redirect URL preserving pagination and filter
+            let mut redirect_url = format!(
+                "/{}/decks/{}/edit?page={}",
+                form.language_slug,
+                form.deck_slug,
+                form.page
+            );
+            if let Some(tf) = form.type_filter {
+                redirect_url.push_str(&format!("&type_filter={}", tf));
+            }
+            Redirect::to(&redirect_url).into_response()
+        }
+        Err(error) => {
+            log::error!("Failed to add card to deck: {}", error);
+            let error_url = format!("/error?title={}", urlencoding::encode(&error));
+            Redirect::to(&error_url).into_response()
+        }
+    }
+}
+
 /// Instantiate and setup routes for the API router. This router will handle endpoints for
 /// the internal API, not meant to return HTML views.
 pub fn make_api_router() -> Router<PgPool> {
@@ -81,4 +143,6 @@ pub fn make_api_router() -> Router<PgPool> {
         .route("/card-types", get(get_card_types))
         .route("/languages/add", post(add_language))
         .route("/cards/add", post(add_card))
+        .route("/decks/create", post(create_deck))
+        .route("/decks/add-card", post(add_card_to_deck))
 }

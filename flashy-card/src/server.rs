@@ -4,7 +4,7 @@ mod api;
 use super::Args;
 use sqlx::postgres;
 use axum::Router;
-use axum::routing::{get, post};
+use axum::routing::get;
 use tower_http::services::ServeDir;
 
 
@@ -29,7 +29,9 @@ pub async fn create_router(args: Args) -> Router {
         .route("/", get(views::home_page))
         .route("/languages", get(views::render_languages_page))
         .route("/decks", get(views::render_all_decks_page))
+        .route("/decks/new", get(views::render_create_deck_page))
         .route("/{language_slug}/decks", get(views::render_language_decks_page))
+        .route("/{language_slug}/decks/{deck_slug}/edit", get(views::render_edit_deck_page))
         .route("/{language_slug}/add-card", get(views::render_add_card_page))
         .route("/error", get(views::error_page))
         .with_state(pool)

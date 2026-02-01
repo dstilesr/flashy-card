@@ -31,6 +31,20 @@ pub struct ErrorQuery {
     pub title: String,
 }
 
+/// Query parameters for create deck page (optional preselection)
+#[derive(Deserialize)]
+pub struct CreateDeckQuery {
+    pub language: Option<String>,
+}
+
+/// Query parameters for the deck edit page
+#[derive(Deserialize)]
+pub struct DeckEditQuery {
+    #[serde(default = "default_page")]
+    pub page: i32,
+    pub type_filter: Option<i32>,
+}
+
 /// Render the error page into a response with the given status code.
 pub fn render_error_page(err_title: String, err_msg: String, status_code: StatusCode) -> Response {
     let error_page = templates::ErrorPage {
@@ -170,6 +184,107 @@ pub async fn render_add_card_page(
                 language_slug,
                 language_name,
                 card_types,
+            };
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}
+
+/// Render the create deck form page
+pub async fn render_create_deck_page(
+    State(pool): State<PgPool>,
+    Query(query): Query<CreateDeckQuery>,
+) -> Response {
+    // Fetch all languages for the dropdown
+    // For simplicity, fetch from page 1; if there are many languages, this could be improved
+    match repository::get_languages(1, &pool).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Languages"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok((languages, _)) => {
+            let template = templates::CreateDeckPage {
+                languages,
+                preselected_language: query.language,
+            };
+            Html(template.render().unwrap()).into_response()
+        }
+    }
+}
+
+/// Render the deck edit page showing available cards to add
+pub async fn render_edit_deck_page(
+    State(pool): State<PgPool>,
+    Path((language_slug, deck_slug)): Path<(String, String)>,
+    Query(query): Query<DeckEditQuery>,
+) -> Response {
+    if query.page <= 0 {
+        return render_error_page(
+            String::from("Invalid Page Number"),
+            String::from("Page must be greater than 0."),
+            StatusCode::BAD_REQUEST,
+        );
+    }
+
+    // 1. Get deck info
+    let deck = match repository::get_deck_info(&language_slug, &deck_slug, &pool).await {
+        Ok(d) => d,
+        Err(e) => {
+            let status = if e.contains("not found") {
+                StatusCode::NOT_FOUND
+            } else {
+                StatusCode::INTERNAL_SERVER_ERROR
+            };
+            return render_error_page(
+                String::from("Error Getting Deck"),
+                e,
+                status,
+            );
+        }
+    };
+
+    // 2. Get card types for filter dropdown
+    let card_types = match repository::list_card_types(&pool).await {
+        Ok(ct) => ct,
+        Err(e) => {
+            return render_error_page(
+                String::from("Error Getting Card Types"),
+                e,
+                StatusCode::INTERNAL_SERVER_ERROR,
+            );
+        }
+    };
+
+    // 3. Get available cards (not in deck)
+    match repository::list_available_cards_for_deck(
+        deck.id,
+        &language_slug,
+        query.type_filter,
+        query.page,
+        &pool
+    ).await {
+        Err(e) => render_error_page(
+            String::from("Error Getting Cards"),
+            format!("{}", e),
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+        Ok((cards, has_next)) => {
+            // Build base_url for pagination
+            let base_url = if let Some(tf) = query.type_filter {
+                format!("/{}/decks/{}/edit?type_filter={}", language_slug, deck_slug, tf)
+            } else {
+                format!("/{}/decks/{}/edit", language_slug, deck_slug)
+            };
+
+            let template = templates::EditDeckPage {
+                deck,
+                cards,
+                card_types,
+                page: query.page,
+                has_next,
+                type_filter: query.type_filter,
+                base_url,
             };
             Html(template.render().unwrap()).into_response()
         }

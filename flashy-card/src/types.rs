@@ -69,3 +69,43 @@ pub struct AddCardForm {
     pub examples: Option<String>,
     pub additional_info: Option<String>,
 }
+
+/// Form data for creating a new deck
+#[derive(Debug, Deserialize)]
+pub struct AddDeckForm {
+    pub language_slug: String,
+    pub name: String,
+    pub description: Option<String>,
+}
+
+/// Form data for adding a card to a deck (preserves pagination state)
+#[derive(Debug, Deserialize)]
+pub struct AddCardToDeckForm {
+    pub card_id: i32,
+    pub deck_slug: String,
+    pub language_slug: String,
+    pub page: i32,
+    pub type_filter: Option<i32>,
+}
+
+/// Card with ID for edit deck view
+#[derive(FromRow, Debug)]
+pub struct CardWithId {
+    pub id: i32,
+    pub target: String,
+    pub translation: String,
+    pub hint: Option<String>,
+    #[sqlx(rename = "type_name")]
+    pub card_type: String,
+}
+
+/// Deck info for edit page header
+#[derive(FromRow, Debug)]
+pub struct DeckInfo {
+    pub id: i32,
+    pub name: String,
+    pub slug: String,
+    pub description: Option<String>,
+    pub language_name: String,
+    pub language_slug: String,
+}

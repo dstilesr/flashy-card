@@ -573,3 +573,260 @@ nav a:hover {
 .form-actions .btn-submit {
     flex: 2;
 }
+
+/* Create Deck Page */
+.create-deck-page {
+    padding: 2rem 0;
+}
+
+.create-deck-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.create-deck-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.create-deck-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.create-deck-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.create-deck-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.create-deck-form select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Edit Deck Page */
+.edit-deck-page {
+    padding: 2rem 0;
+}
+
+.edit-deck-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.edit-deck-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.edit-deck-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.edit-deck-header .deck-description {
+    color: #555;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* Filter Form */
+.filter-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-form form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-form label {
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.filter-form select {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.filter-form select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.btn-filter {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.btn-filter:hover {
+    background-color: #2980b9;
+}
+
+/* Available Cards Section */
+.available-cards {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.available-cards h2 {
+    color: #2c3e50;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.no-cards {
+    text-align: center;
+    color: #999;
+    font-size: 1.1rem;
+    padding: 3rem 1rem;
+    font-style: italic;
+}
+
+/* Cards Table */
+.cards-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.cards-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.cards-table th {
+    padding: 1rem;
+    text-align: left;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.cards-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    color: #555;
+}
+
+.cards-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.cards-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.btn-add-card {
+    background-color: #27ae60;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-add-card:hover {
+    background-color: #229954;
+}
+
+.btn-add-card:active {
+    transform: translateY(1px);
+}
+
+/* Finish Editing Button */
+.btn-finish {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.btn-finish:hover {
+    background-color: #2980b9;
+}
+
+.edit-deck-page .form-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Responsive adjustments for cards table */
+@media (max-width: 768px) {
+    .cards-table {
+        font-size: 0.9rem;
+    }
+
+    .cards-table th,
+    .cards-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .filter-form form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form select {
+        width: 100%;
+    }
+}
