@@ -24,6 +24,7 @@ pub struct DeckSummary {
     pub slug: String,
     pub description: Option<String>,
     pub language_name: String,
+    pub language_slug: String,
     pub total_cards: i32,
 }
 

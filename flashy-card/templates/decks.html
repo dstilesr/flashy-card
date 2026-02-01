@@ -29,6 +29,7 @@
             <div class="deck-card-footer">
                 <a href="#" class="btn-study">Study Deck</a>
                 <a href="/decks/{{ deck.slug }}/cards" class="btn-view">View Cards</a>
+                <a href="/{{ deck.language_slug }}/decks/{{ deck.slug }}/edit" class="btn-view">Add / Remove Cards</a>
             </div>
         </div>
         {% endfor %}

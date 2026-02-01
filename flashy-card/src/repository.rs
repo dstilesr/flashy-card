@@ -131,12 +131,13 @@ pub async fn list_decks(
                    d.slug,
                    d.description,
                    l.name as language_name,
+                   l.slug as language_slug,
                    coalesce(count(distinct ctd.card_id), 0)::int as total_cards
             from card_decks as d
             join languages as l on l.id = d.language_id
             left join card_to_deck as ctd on ctd.deck_id = d.id
             where l.slug = $1
-            group by d.id, d.name, d.slug, d.description, l.name
+            group by d.id, d.name, d.slug, d.description, l.name, l.slug
             order by d.id desc
             limit $2
             offset $3;
@@ -150,11 +151,12 @@ pub async fn list_decks(
                    d.slug,
                    d.description,
                    l.name as language_name,
+                   l.slug as language_slug,
                    coalesce(count(distinct ctd.card_id), 0)::int as total_cards
             from card_decks as d
             join languages as l on l.id = d.language_id
             left join card_to_deck as ctd on ctd.deck_id = d.id
-            group by d.id, d.name, d.slug, d.description, l.name
+            group by d.id, d.name, d.slug, d.description, l.name, l.slug
             order by d.id desc
             limit $1
             offset $2;
