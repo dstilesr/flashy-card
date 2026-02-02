@@ -20,6 +20,8 @@ pub async fn create_router(args: Args) -> Router {
     let pool = conn_opts.connect(&conn_string).await
         .expect("Can't connect to database");
 
+    super::repository::migrate(&pool).await;
+
     let api_route = api::make_api_router();
 
     // Setup Router and Routes

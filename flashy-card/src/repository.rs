@@ -4,6 +4,14 @@ use super::types::{LangInfo, CardType, DeckSummary, CardSummary, AddCardForm, Ca
 
 const PAGE_SIZE: i32 = 10;
 
+
+/// Run the migrations on the database. For use on application startup.
+pub async fn migrate(pool: &PgPool) {
+    log::info!("Migrating database");
+    sqlx::migrate!().run(pool).await.unwrap();
+    log::info!("Database migration complete");
+}
+
 /// Fetch a page of language records from the database.
 pub async fn get_languages(page: i32, pool: &PgPool) -> Result<(Vec<LangInfo>, bool), String> {
     let limit = PAGE_SIZE + 1;

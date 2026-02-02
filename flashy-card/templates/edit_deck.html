@@ -21,11 +21,11 @@
                 <option value="">All Types</option>
                 {% for ct in card_types %}
                 <option value="{{ ct.id }}"
-                    {% match type_filter %}
+                    {%- match type_filter %}
                         {% when Some with (selected) %}
                             {% if ct.id == *selected %}selected{% endif %}
                         {% when None %}
-                    {% endmatch %}>
+                    {%- endmatch %}>
                     {{ ct.type_name }}
                 </option>
                 {% endfor %}
