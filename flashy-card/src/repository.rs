@@ -1,3 +1,5 @@
+mod users;
+
 use sqlx::postgres::PgPool;
 
 use super::types::{LangInfo, CardType, DeckSummary, CardSummary, AddCardForm, CardWithId, DeckInfo};
