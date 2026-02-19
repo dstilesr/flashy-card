@@ -112,3 +112,42 @@ pub struct DeckInfo {
     pub language_name: String,
     pub language_slug: String,
 }
+
+/// Information on a user retrieved from the DB
+#[derive(FromRow, Debug)]
+pub struct UserInfo {
+    pub id: i32,
+    pub username: String,
+    pub uuid: String,
+    pub pw_hash: String,
+}
+
+/// JWT claims embedded in the auth token
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    pub sub: String,
+    pub uuid: String,
+    pub exp: usize,
+}
+
+/// Form data submitted from the login page
+#[derive(Debug, Deserialize)]
+pub struct LoginForm {
+    pub username: String,
+    pub password: String,
+}
+
+/// Form data submitted from the create user page
+#[derive(Debug, Deserialize)]
+pub struct CreateUserForm {
+    pub username: String,
+    pub password: String,
+    pub confirm_password: String,
+}
+
+/// Authenticated user info extracted from a valid JWT, available in request extensions
+#[derive(Debug, Clone)]
+pub struct AuthenticatedUser {
+    pub username: String,
+    pub uuid: String,
+}

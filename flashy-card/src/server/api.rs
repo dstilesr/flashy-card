@@ -1,12 +1,17 @@
 use axum::response::{NoContent, IntoResponse, Response, Json, Redirect};
 use axum::routing::{get, post};
-use axum::{Router, Form};
-use sqlx::postgres::PgPool;
+use axum::{Extension, Router, Form};
 use axum::extract::State;
 use axum::http::StatusCode;
+use axum_extra::extract::CookieJar;
+use axum_extra::extract::cookie::{Cookie, SameSite};
+use askama::Template;
+use sqlx::postgres::PgPool;
 
 use super::super::types;
 use super::super::repository;
+use super::auth::{self, JwtSecret};
+use super::super::templates;
 
 /// Health check endpoint function
 pub async fn health() -> Response {
@@ -135,11 +140,90 @@ pub async fn add_card_to_deck(
     }
 }
 
+/// Handle login form submission: validate credentials, set JWT cookie, redirect to home
+pub async fn handle_login(
+    State(pool): State<PgPool>,
+    Extension(jwt_secret): Extension<JwtSecret>,
+    jar: CookieJar,
+    Form(form): Form<types::LoginForm>,
+) -> Response {
+    match repository::validate_password(form.username, form.password, &pool).await {
+        Ok(user_info) => {
+            match auth::create_token(&user_info.username, &user_info.uuid, &jwt_secret.0) {
+                Ok(token) => {
+                    let cookie = Cookie::build((auth::COOKIE_NAME, token))
+                        .path("/")
+                        .http_only(true)
+                        .same_site(SameSite::Lax)
+                        .build();
+                    (jar.add(cookie), Redirect::to("/")).into_response()
+                }
+                Err(e) => {
+                    log::error!("Failed to create JWT: {}", e);
+                    let html = templates::LoginPage {
+                        error: Some("Internal server error".to_string()),
+                    }.render().unwrap();
+                    (StatusCode::INTERNAL_SERVER_ERROR, axum::response::Html(html)).into_response()
+                }
+            }
+        }
+        Err(_) => {
+            let html = templates::LoginPage {
+                error: Some("Invalid username or password".to_string()),
+            }.render().unwrap();
+            (StatusCode::UNAUTHORIZED, axum::response::Html(html)).into_response()
+        }
+    }
+}
+
+/// Handle logout: clear the auth cookie and redirect to login
+pub async fn handle_logout(jar: CookieJar) -> Response {
+    let cookie = Cookie::build((auth::COOKIE_NAME, ""))
+        .path("/")
+        .build();
+    (jar.remove(cookie), Redirect::to("/login")).into_response()
+}
+
+/// Handle create user form submission.
+/// Always accessible when no users exist; requires auth when users exist.
+pub async fn handle_create_user(
+    State(pool): State<PgPool>,
+    Extension(jwt_secret): Extension<JwtSecret>,
+    jar: CookieJar,
+    Form(form): Form<types::CreateUserForm>,
+) -> Response {
+    // Enforce auth when users already exist
+    match repository::has_users(&pool).await {
+        Ok(true) if !auth::is_authenticated(&jar, &jwt_secret.0) => {
+            return Redirect::to("/login").into_response();
+        }
+        _ => {}
+    }
+
+    // Validate passwords match
+    if form.password != form.confirm_password {
+        let html = templates::CreateUserPage {
+            error: Some("Passwords do not match".to_string()),
+        }.render().unwrap();
+        return (StatusCode::UNPROCESSABLE_ENTITY, axum::response::Html(html)).into_response();
+    }
+
+    match repository::create_user(form.username, form.password, &pool).await {
+        Ok(_) => Redirect::to("/login").into_response(),
+        Err(e) => {
+            log::error!("Failed to create user: {}", e);
+            let html = templates::CreateUserPage {
+                error: Some(e),
+            }.render().unwrap();
+            (StatusCode::UNPROCESSABLE_ENTITY, axum::response::Html(html)).into_response()
+        }
+    }
+}
+
 /// Instantiate and setup routes for the API router. This router will handle endpoints for
 /// the internal API, not meant to return HTML views.
 pub fn make_api_router() -> Router<PgPool> {
     Router::new()
-        .route("/health", get(health))
         .route("/card-types", get(get_card_types))
         .route("/languages/add", post(add_language))
         .route("/cards/add", post(add_card))

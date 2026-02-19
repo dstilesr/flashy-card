@@ -25,6 +25,7 @@ services:
     environment:
       DATABASE_URL: "postgres://dev:dev@postgres/flashcards"
       RUST_LOG: "debug"
+      JWT_SECRET: "dev-secret-change-in-production"
     ports:
       - "3000:3000"
 

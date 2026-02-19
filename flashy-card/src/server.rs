@@ -1,12 +1,13 @@
 mod views;
 mod api;
+mod auth;
 
 use super::Args;
 use sqlx::postgres;
-use axum::Router;
-use axum::routing::get;
+use axum::{Extension, Router};
+use axum::routing::{get, post};
+use axum::middleware;
 use tower_http::services::ServeDir;
-
 
 
 /// Create a new router to serve requests
@@ -22,12 +23,10 @@ pub async fn create_router(args: Args) -> Router {
 
     super::repository::migrate(&pool).await;
 
-    let api_route = api::make_api_router();
+    let jwt_secret = auth::JwtSecret(auth::get_jwt_secret());
 
-    // Setup Router and Routes
-    Router::new()
-        .nest_service("/static", ServeDir::new(args.static_dir))
-        .nest("/api", api_route)
+    // Protected routes: require a valid JWT cookie
+    let protected = Router::new()
         .route("/", get(views::home_page))
         .route("/languages", get(views::render_languages_page))
         .route("/decks", get(views::render_all_decks_page))
@@ -38,5 +37,21 @@ pub async fn create_router(args: Args) -> Router {
         .route("/{language_slug}/cards", get(views::render_language_cards_page))
         .route("/{language_slug}/add-card", get(views::render_add_card_page))
         .route("/error", get(views::error_page))
+        .nest("/api", api::make_api_router())
+        .layer(middleware::from_fn_with_state(pool.clone(), auth::require_auth));
+
+    // Public routes: no auth required (individual handlers may enforce conditional auth)
+    let public = Router::new()
+        .route("/login", get(views::login_page))
+        .route("/create-user", get(views::create_user_page))
+        .route("/api/login", post(api::handle_login))
+        .route("/api/logout", get(api::handle_logout))
+        .route("/api/create-user", post(api::handle_create_user))
+        .route("/api/health", get(api::health))
+        .nest_service("/static", ServeDir::new(args.static_dir));
+
+    public
+        .merge(protected)
+        .layer(Extension(jwt_secret))
         .with_state(pool)
 }

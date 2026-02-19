@@ -1,4 +1,5 @@
 mod users;
+pub use users::{create_user, has_users, validate_password};
 
 use sqlx::postgres::PgPool;
 

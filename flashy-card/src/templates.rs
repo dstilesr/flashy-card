@@ -2,6 +2,18 @@ use askama::Template;
 use super::types::{LangInfo, DeckSummary, CardType, CardWithId, DeckInfo, CardSummary};
 
 #[derive(Template)]
+#[template(path = "login.html")]
+pub struct LoginPage {
+    pub error: Option<String>,
+}
+
+#[derive(Template)]
+#[template(path = "create_user.html")]
+pub struct CreateUserPage {
+    pub error: Option<String>,
+}
+
+#[derive(Template)]
 #[template(path = "home.html")]
 pub struct HomePage;
 

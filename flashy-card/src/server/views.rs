@@ -1,14 +1,38 @@
 use serde::Deserialize;
 use askama::Template;
 use axum::http::StatusCode;
-use axum::response::{Html, IntoResponse, Response};
+use axum::response::{Html, IntoResponse, Response, Redirect};
 use axum::extract::{Query, State, Path};
+use axum::Extension;
+use axum_extra::extract::CookieJar;
 use sqlx::PgPool;
 use super::super::{templates, repository};
+use super::auth::{self, JwtSecret};
 
 
 fn default_page() -> i32 {
     1
+}
+
+/// Render the login page
+pub async fn login_page() -> Response {
+    Html(templates::LoginPage { error: None }.render().unwrap()).into_response()
+}
+
+/// Render the create user page.
+/// Always accessible when no users exist (first-run setup).
+/// Requires authentication when users already exist.
+pub async fn create_user_page(
+    State(pool): State<PgPool>,
+    Extension(jwt_secret): Extension<JwtSecret>,
+    jar: CookieJar,
+) -> Response {
+    match repository::has_users(&pool).await {
+        Ok(true) if !auth::is_authenticated(&jar, &jwt_secret.0) => {
+            Redirect::to("/login").into_response()
+        }
+        _ => Html(templates::CreateUserPage { error: None }.render().unwrap()).into_response(),
+    }
 }
 
 fn default_error_title() -> String {
