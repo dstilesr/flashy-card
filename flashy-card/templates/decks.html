@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "macros.jinja" as macros %}
+
+{% block content %}
+<div class="decks-page">
+    <div class="decks-header">
+        <h1>Card Decks</h1>
+        <p>Browse card decks across all languages</p>
+    </div>
+
+    <div class="decks-grid">
+        {% for deck in decks %}
+        <div class="deck-card">
+            <div class="deck-card-header">
+                <h2>{{ deck.name }}</h2>
+                <span class="deck-language">{{ deck.language_name }}</span>
+            </div>
+            <div class="deck-card-body">
+                {% match deck.description %}
+                  {% when Some with (desc) %}
+                  <p class="deck-description">{{ desc }}</p>
+                  {% when None %}
+                  <p class="deck-description no-description">No description available</p>
+                {% endmatch %}
+                <div class="deck-stats">
+                    <span class="card-count">{{ deck.total_cards }} cards</span>
+                </div>
+            </div>
+            <div class="deck-card-footer">
+                <a href="#" class="btn-study">Study Deck</a>
+                <a href="/decks/{{ deck.slug }}/cards" class="btn-view">View Cards</a>
+                <a href="/{{ deck.language_slug }}/decks/{{ deck.slug }}/edit" class="btn-view">Add / Remove Cards</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {{ macros::pagination(page=page, has_next=has_next, base_url=base_url) }}
+</div>
+{% endblock %}

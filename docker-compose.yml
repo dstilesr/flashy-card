@@ -1,25 +1,33 @@
-version: "3"
 services:
-  database:
-    container_name: database
-    image: "postgres:16"
-    env_file:
-      - app/.env.example
+  postgres:
+    image: postgres:18-alpine
+    container_name: flashy-card-postgres
+    environment:
+      POSTGRES_DB: flashcards
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
     ports:
       - "5432:5432"
     volumes:
-      - "flashy-card-db:/var/lib/postgresql/data"
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d flashcards"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  app:
-    container_name: "app"
+  flashy-card:
+    container_name: flashy-card-app
+    depends_on:
+      - postgres
     build:
-      context: ./app
-    env_file:
-      - app/.env.example
+      context: "./flashy-card"
+    environment:
+      DATABASE_URL: "postgres://dev:dev@postgres/flashcards"
+      RUST_LOG: "debug"
+      JWT_SECRET: "dev-secret-change-in-production"
     ports:
       - "3000:3000"
-    volumes:
-      - "./app/templates:/app/templates"
 
 volumes:
-  flashy-card-db:
+  postgres_data:

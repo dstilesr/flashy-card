@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="create-deck-page">
+    <div class="create-deck-header">
+        <h1>Create New Deck</h1>
+        <p>Create a new flashcard deck to organize your study cards</p>
+    </div>
+
+    <div class="create-deck-form">
+        <form method="POST" action="/api/decks/create">
+            <div class="form-group">
+                <label for="language_slug">Language: <span class="required">*</span></label>
+                <select id="language_slug" name="language_slug" required>
+                    <option value="">-- Select a language --</option>
+                    {% for lang in languages %}
+                    <option value="{{ lang.slug }}"
+                        {% match preselected_language %}
+                            {% when Some with (selected) %}
+                                {% if lang.slug == *selected %}selected{% endif %}
+                            {% when None %}
+                        {% endmatch %}>
+                        {{ lang.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Deck Name: <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required maxlength="128"
+                       placeholder="e.g., Common Verbs, Food Vocabulary">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description (optional):</label>
+                <input type="text" id="description" name="description" maxlength="256"
+                       placeholder="Brief description of this deck's theme">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Create Deck</button>
+                <a href="/decks" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

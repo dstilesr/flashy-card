@@ -1,0 +1,1039 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* Navigation */
+nav {
+    background-color: #2c3e50;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+nav ul li:first-child {
+    margin-right: auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3498db;
+}
+
+nav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #34495e;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+/* Home page */
+.home {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.home h1 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+}
+
+.home p {
+    color: #555;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+/* Languages page */
+.languages-page {
+    padding: 2rem 0;
+}
+
+.languages-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.languages-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.languages-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.language-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.language-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.language-card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.language-card-header h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.language-date {
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.language-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.language-description {
+    color: #555;
+    line-height: 1.6;
+}
+
+.language-description.no-description {
+    color: #999;
+    font-style: italic;
+}
+
+.language-card-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-view {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    text-align: center;
+}
+
+.btn-view:hover {
+    background-color: #2980b9;
+}
+
+.deck-card-footer .btn-view {
+    flex: 1;
+}
+
+.btn-add {
+    display: inline-block;
+    background-color: #27ae60;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    text-align: center;
+}
+
+.btn-add:hover {
+    background-color: #229954;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.pagination-btn {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.pagination-btn:hover {
+    background-color: #2980b9;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Error page */
+.error-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 2rem;
+}
+
+.error-container {
+    text-align: center;
+    max-width: 600px;
+}
+
+.error-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    color: #e74c3c;
+}
+
+.error-title {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.error-description {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    display: inline-block;
+    background-color: #95a5a6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Add Language Form */
+.add-language-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-top: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-language-form h2 {
+    color: #2c3e50;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+}
+
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group input[type="text"]::placeholder {
+    color: #999;
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: #27ae60;
+    color: white;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.btn-submit:hover {
+    background-color: #229954;
+}
+
+.btn-submit:active {
+    transform: translateY(1px);
+}
+
+/* Decks page */
+.decks-page {
+    padding: 2rem 0;
+}
+
+.decks-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.decks-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.decks-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.decks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.deck-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.deck-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.deck-card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.deck-card-header h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.deck-language {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.deck-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.deck-description {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.deck-description.no-description {
+    color: #999;
+    font-style: italic;
+}
+
+.deck-stats {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-count {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.deck-card-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-study {
+    display: inline-block;
+    background-color: #27ae60;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-study:hover {
+    background-color: #229954;
+}
+
+/* Add Card Page */
+.add-card-page {
+    padding: 2rem 0;
+}
+
+.add-card-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.add-card-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.add-card-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.add-card-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-card-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.add-card-form select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.add-card-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    resize: vertical;
+}
+
+.add-card-form textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.required {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-cancel {
+    flex: 1;
+    display: inline-block;
+    background-color: #95a5a6;
+    color: white;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.btn-cancel:hover {
+    background-color: #7f8c8d;
+}
+
+.form-actions .btn-submit {
+    flex: 2;
+}
+
+/* Create Deck Page */
+.create-deck-page {
+    padding: 2rem 0;
+}
+
+.create-deck-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.create-deck-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.create-deck-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.create-deck-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.create-deck-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.create-deck-form select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Edit Deck Page */
+.edit-deck-page {
+    padding: 2rem 0;
+}
+
+.edit-deck-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.edit-deck-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.edit-deck-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.edit-deck-header .deck-description {
+    color: #555;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* Filter Form */
+.filter-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-form form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-form label {
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.filter-form select {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.filter-form select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.btn-filter {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.btn-filter:hover {
+    background-color: #2980b9;
+}
+
+/* Available Cards Section */
+.available-cards {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.available-cards h2 {
+    color: #2c3e50;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.no-cards {
+    text-align: center;
+    color: #999;
+    font-size: 1.1rem;
+    padding: 3rem 1rem;
+    font-style: italic;
+}
+
+/* Cards Table */
+.cards-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.cards-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.cards-table th {
+    padding: 1rem;
+    text-align: left;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.cards-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    color: #555;
+}
+
+.cards-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.cards-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.btn-add-card {
+    background-color: #27ae60;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-add-card:hover {
+    background-color: #229954;
+}
+
+.btn-add-card:active {
+    transform: translateY(1px);
+}
+
+/* Finish Editing Button */
+.btn-finish {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.btn-finish:hover {
+    background-color: #2980b9;
+}
+
+.edit-deck-page .form-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Responsive adjustments for cards table */
+@media (max-width: 768px) {
+    .cards-table {
+        font-size: 0.9rem;
+    }
+
+    .cards-table th,
+    .cards-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .filter-form form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form select {
+        width: 100%;
+    }
+}
+
+/* Cards List Page */
+.cards-page {
+    padding: 2rem 0;
+}
+
+.cards-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.cards-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.cards-header p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cards-header .back-link {
+    margin-top: 1rem;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.card-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.card-item-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card-item-header h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin: 0;
+    flex: 1;
+    word-break: break-word;
+}
+
+.card-type-badge {
+    display: inline-block;
+    background-color: #9b59b6;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.card-item-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.card-item-body > div {
+    margin-bottom: 1rem;
+}
+
+.card-item-body > div:last-child {
+    margin-bottom: 0;
+}
+
+.card-translation {
+    color: #2c3e50;
+    font-size: 1.05rem;
+}
+
+.card-hint {
+    color: #555;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+.card-examples {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.card-additional {
+    color: #666;
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #3498db;
+}
+
+.card-item-body strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Responsive adjustments for cards page */
+@media (max-width: 768px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-type-badge {
+        align-self: flex-start;
+    }
+}
+
+/* Navigation - logout link pushed to far right */
+nav ul li.nav-logout {
+    margin-left: auto;
+}
+
+/* Login Page */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 2rem;
+}
+
+.login-form {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-form h2 {
+    color: #2c3e50;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+}
+
+.login-form input[type="password"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.login-error {
+    background-color: #fdecea;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    color: #c0392b;
+    font-size: 0.95rem;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.form-link a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.form-link a:hover {
+    text-decoration: underline;
+}

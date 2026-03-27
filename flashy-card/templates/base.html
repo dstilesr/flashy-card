@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashy Cards</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li>Flashy Cards</li>
+            <li><a href="/languages">Languages</a></li>
+            <li><a href="/decks">Card Decks</a></li>
+            <li><a href="/decks/new">New Deck</a></li>
+            <li><a href="/create-user">Create User</a></li>
+            <li class="nav-logout"><a href="/api/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

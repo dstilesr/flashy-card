@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-form">
+        <h2>Login</h2>
+        {% if let Some(error) = error %}
+        <div class="login-error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        <form action="/api/login" method="POST">
+            <div class="form-group">
+                <label for="username">Username <span class="required">*</span></label>
+                <input type="text" id="username" name="username" required placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% import "macros.jinja" as macros %}
+
+{% block content %}
+<div class="edit-deck-page">
+    <div class="edit-deck-header">
+        <h1>Edit Deck: {{ deck.name }}</h1>
+        <p>{{ deck.language_name }} - Add cards to this deck</p>
+        {% match deck.description %}
+            {% when Some with (desc) %}
+            <p class="deck-description">{{ desc }}</p>
+            {% when None %}
+        {% endmatch %}
+    </div>
+
+    <!-- Filter Form -->
+    <div class="filter-form">
+        <form method="GET" action="/{{ deck.language_slug }}/decks/{{ deck.slug }}/edit">
+            <label for="type_filter">Filter by card type:</label>
+            <select id="type_filter" name="type_filter" onchange="this.form.submit()">
+                <option value="">All Types</option>
+                {% for ct in card_types %}
+                <option value="{{ ct.id }}"
+                    {%- match type_filter %}
+                        {% when Some with (selected) %}
+                            {% if ct.id == *selected %}selected{% endif %}
+                        {% when None %}
+                    {%- endmatch %}>
+                    {{ ct.type_name }}
+                </option>
+                {% endfor %}
+            </select>
+            <noscript><button type="submit" class="btn-filter">Filter</button></noscript>
+        </form>
+    </div>
+
+    <!-- Available Cards List -->
+    <div class="available-cards">
+        <h2>Available Cards (Page {{ page }})</h2>
+        {% if cards.is_empty() %}
+        <p class="no-cards">No cards available to add. {% if type_filter.is_some() %}Try removing the filter or {% endif %}create more cards for this language first.</p>
+        {% else %}
+        <table class="cards-table">
+            <thead>
+                <tr>
+                    <th>Target</th>
+                    <th>Translation</th>
+                    <th>Type</th>
+                    <th>Hint</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for card in cards %}
+                <tr>
+                    <td>{{ card.target }}</td>
+                    <td>{{ card.translation }}</td>
+                    <td>{{ card.card_type }}</td>
+                    <td>
+                        {% match card.hint %}
+                            {% when Some with (h) %}{{ h }}
+                            {% when None %}-
+                        {% endmatch %}
+                    </td>
+                    <td>
+                        <form method="POST" action="/api/decks/add-card" style="display:inline;">
+                            <input type="hidden" name="card_id" value="{{ card.id }}">
+                            <input type="hidden" name="deck_slug" value="{{ deck.slug }}">
+                            <input type="hidden" name="language_slug" value="{{ deck.language_slug }}">
+                            <input type="hidden" name="page" value="{{ page }}">
+                            {% match type_filter %}
+                                {% when Some with (tf) %}
+                                <input type="hidden" name="type_filter" value="{{ tf }}">
+                                {% when None %}
+                            {% endmatch %}
+                            <button type="submit" class="btn-add-card">Add to Deck</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <!-- Pagination with filter preservation -->
+    {{ macros::pagination(page=page, has_next=has_next, base_url=base_url) }}
+
+    <!-- Finish Button -->
+    <div class="form-actions">
+        <a href="/{{ deck.language_slug }}/decks" class="btn-finish">Finish Editing</a>
+    </div>
+</div>
+{% endblock %}
